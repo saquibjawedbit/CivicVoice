@@ -75,6 +75,9 @@ class SignUpScreen extends StatelessWidget {
       text: text,
       textColor: textColor,
       bgColor: bgColor,
+      onTap: () {
+        //TODO::SIGN UP
+      },
     );
   }
 

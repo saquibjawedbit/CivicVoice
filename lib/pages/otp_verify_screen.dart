@@ -1,8 +1,9 @@
 import 'dart:async';
 
-import 'package:civic_voice/pages/splash_screen.dart';
+import 'package:civic_voice/pages/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:get/get.dart';
 
 class OtpVerifyScreen extends StatefulWidget {
   const OtpVerifyScreen({super.key});
@@ -75,10 +76,7 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
                 //runs when every textfield is filled
                 onSubmit: (String verificationCode) {
                   //TODO::OTP VERTIFCATION
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SplashScreen()));
+                  Get.offAll(const HomeScreen());
                 }, // end onSubmit
               ),
               const SizedBox(

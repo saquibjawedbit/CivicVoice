@@ -1,5 +1,7 @@
 import 'package:camera/camera.dart';
+import 'package:civic_voice/pages/submit_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -36,7 +38,9 @@ class _HomeScreenState extends State<HomeScreen> {
       try {
         // Capture the image and save it as a file
         imageFile = await _cameraController!.takePicture();
-        setState(() {});
+        if (imageFile != null) {
+          Get.to(SubmitScreen(imageFile: imageFile!));
+        }
       } catch (e) {
         debugPrint("Error capturing image: $e");
       }

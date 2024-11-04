@@ -58,6 +58,9 @@ class LoginScreen extends StatelessWidget {
                           text: "Verify Phone Number",
                           textColor: Colors.white,
                           bgColor: Theme.of(context).colorScheme.primary,
+                          onTap: () {
+                            //TODO::SENT OTP
+                          },
                         ),
                       ],
                     ),

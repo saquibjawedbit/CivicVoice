@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_otp_text_field: ^1.2.0
   camera: ^0.10.1+1
+  get:
 
 dev_dependencies:
   flutter_test:

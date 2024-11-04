@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 
 class PrimaryBlueButton extends StatelessWidget {
-  const PrimaryBlueButton({
-    super.key,
-    required this.text,
-    required this.textColor,
-    required this.bgColor,
-  });
+  const PrimaryBlueButton(
+      {super.key,
+      required this.text,
+      required this.textColor,
+      required this.bgColor,
+      required this.onTap});
 
   final String text;
   final Color textColor;
   final Color bgColor;
+  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onTap,
       style: ElevatedButton.styleFrom(
         backgroundColor: bgColor,
         shape: RoundedRectangleBorder(
