@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:civic_voice/components/buttons/primary_blue_button.dart';
+import 'package:civic_voice/screens/complain/title_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SubmitDetailScreen extends StatelessWidget {
   const SubmitDetailScreen({super.key, required this.image});
@@ -15,6 +17,7 @@ class SubmitDetailScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
       ),
+      backgroundColor: Theme.of(context).colorScheme.onPrimary,
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
         child: Column(
@@ -43,7 +46,9 @@ class SubmitDetailScreen extends StatelessWidget {
                       text: "Next",
                       textColor: Theme.of(context).colorScheme.onPrimary,
                       bgColor: Theme.of(context).colorScheme.primary,
-                      onTap: () {})
+                      onTap: () {
+                        Get.to(() => const TitleScreen());
+                      })
                 ],
               ),
             )

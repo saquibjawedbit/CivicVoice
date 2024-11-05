@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
-import 'package:civic_voice/pages/submit_screen.dart';
+import 'package:civic_voice/screens/complain/submit_screen.dart';
+import 'package:civic_voice/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -89,7 +90,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.to(() => const ProfileScreen());
+          },
           icon: Icon(
             Icons.account_circle_sharp,
             color: Theme.of(context).colorScheme.primary,

@@ -1,5 +1,7 @@
 import 'package:civic_voice/components/buttons/primary_blue_button.dart';
+import 'package:civic_voice/screens/authentication/otp_verify_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -60,6 +62,7 @@ class LoginScreen extends StatelessWidget {
                           bgColor: Theme.of(context).colorScheme.primary,
                           onTap: () {
                             //TODO::SENT OTP
+                            Get.to(() => const OtpVerifyScreen());
                           },
                         ),
                       ],

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:civic_voice/pages/home_screen.dart';
+import 'package:civic_voice/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:get/get.dart';

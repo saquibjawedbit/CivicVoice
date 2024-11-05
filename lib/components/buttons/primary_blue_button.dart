@@ -19,11 +19,12 @@ class PrimaryBlueButton extends StatelessWidget {
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
         backgroundColor: bgColor,
+        maximumSize: const Size(600, 60),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
         padding: const EdgeInsets.symmetric(vertical: 17),
-        minimumSize: const Size(double.infinity, 10),
+        minimumSize: const Size(600, 10),
       ),
       child: Text(
         text,
