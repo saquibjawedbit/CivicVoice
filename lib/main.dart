@@ -1,6 +1,4 @@
-import 'package:civic_voice/screens/authentication/login_screen.dart';
-import 'package:civic_voice/screens/home_screen.dart';
-
+import 'package:civic_voice/screens/authentication/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,14 +15,14 @@ class MyApp extends StatelessWidget {
       title: 'Civic Voice',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 59, 22, 245),
-          primary: const Color.fromARGB(255, 59, 22, 245),
-          onPrimary: Colors.white,
-          secondary: const Color.fromARGB(255, 22, 137, 245),
+          seedColor: Colors.blue,
+          surface: Colors.white,
+          primary: const Color(0xFF002366),
+          onPrimary: const Color(0xFF003399),
         ),
         useMaterial3: true,
       ),
-      home: const LoginScreen(),
+      home: const SignUpScreen(),
     );
   }
 }

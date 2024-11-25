@@ -1,4 +1,7 @@
+import 'package:civic_voice/components/buttons/primary_blue_button.dart';
+import 'package:civic_voice/screens/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ConfirmationScreen extends StatelessWidget {
   const ConfirmationScreen({super.key});
@@ -6,50 +9,27 @@ class ConfirmationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.onPrimary,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-      ),
-      body: Stack(
-        children: [
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Image.asset(
-              "assets/images/footer.png",
-              width: double.infinity,
-              fit: BoxFit.fill,
-            ),
-          ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.asset("assets/images/logo-1.png"),
                   Container(
-                    decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 191, 245, 251),
-                        border: Border(
-                          left: BorderSide(
-                            color: Color.fromARGB(126, 56, 31, 251),
-                            width: 1.8,
-                          ),
-                          right: BorderSide(
-                            color: Color.fromARGB(126, 56, 31, 251),
-                            width: 1.8,
-                          ),
-                          bottom: BorderSide(
-                            color: Color.fromARGB(126, 56, 31, 251),
-                            width: 1.8,
-                          ),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color.fromARGB(31, 0, 0, 0),
-                            offset: Offset(0, 5),
-                          )
-                        ]),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color.fromARGB(31, 0, 0, 0),
+                          offset: Offset(0, 5),
+                        )
+                      ],
+                    ),
                     padding:
                         const EdgeInsets.symmetric(vertical: 36, horizontal: 8),
                     child: Column(
@@ -66,9 +46,16 @@ class ConfirmationScreen extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-          )
-        ],
+              PrimaryBlueButton(
+                text: "Home",
+                textColor: Colors.white,
+                onTap: () => Get.to(
+                  () => const HomeScreen(),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -80,6 +67,7 @@ class ConfirmationScreen extends StatelessWidget {
       style: TextStyle(
         color: Theme.of(context).colorScheme.primary,
         fontSize: 24,
+        fontWeight: FontWeight.w600,
       ),
     );
   }

@@ -1,5 +1,7 @@
 import 'package:civic_voice/components/buttons/primary_blue_button.dart';
+import 'package:civic_voice/screens/authentication/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -7,62 +9,58 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.onPrimary,
-      body: Center(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 36),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _logoImage(),
+              SizedBox(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "CIVIC VOICE",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 72,
+                        fontWeight: FontWeight.bold,
+                        height: 0.8,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      "   Report it, Resolve it",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               SizedBox(
                 child: Column(
                   children: [
-                    _subText(),
+                    _subText(context),
                     const SizedBox(
-                      height: 32,
+                      height: 18,
                     ),
                     _primaryButton(
-                      "Sign Up",
+                      "Join Us",
                       Colors.white,
                       Theme.of(context).colorScheme.primary,
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    _secondaryButton(),
                   ],
                 ),
               )
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  InkWell _secondaryButton() {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(
-          vertical: 17,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: const Color.fromARGB(255, 116, 116, 116),
-            width: 1.2,
-          ),
-        ),
-        alignment: Alignment.center,
-        child: const Text(
-          "Create account",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
           ),
         ),
       ),
@@ -76,27 +74,36 @@ class SignUpScreen extends StatelessWidget {
       textColor: textColor,
       bgColor: bgColor,
       onTap: () {
-        //TODO::SIGN UP
+        Get.to(() => const LoginScreen());
       },
     );
   }
 
-  Text _subText() {
-    return const Text(
-      "Sanitation Just\na Tap Away !",
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        fontSize: 32,
-        fontWeight: FontWeight.w300,
-        color: Color.fromARGB(255, 51, 246, 29),
-      ),
-    );
-  }
-
-  Image _logoImage() {
-    return const Image(
-      image: AssetImage(
-        'assets/images/logo-1.png',
+  Widget _subText(context) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: RichText(
+        textAlign: TextAlign.left,
+        text: TextSpan(
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          children: const [
+            TextSpan(
+              text: 'Your Voice\n',
+              style: TextStyle(
+                fontSize: 28,
+              ),
+            ),
+            TextSpan(
+              text: 'Our Action',
+              style: TextStyle(
+                fontSize: 48,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -44,7 +44,7 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.onPrimary,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Center(
@@ -60,23 +60,23 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
               OtpTextField(
                 numberOfFields: 4,
                 borderColor: Colors.black,
-                enabledBorderColor: Colors.black45,
-                focusedBorderColor: Colors.black,
+                enabledBorderColor: Colors.grey,
+                focusedBorderColor: Theme.of(context).colorScheme.primary,
                 showFieldAsBox: true,
                 fieldWidth: 72,
-                cursorColor: Colors.black,
+                cursorColor: Theme.of(context).colorScheme.primary,
                 autoFocus: true,
                 borderRadius: BorderRadius.circular(15),
                 contentPadding: const EdgeInsets.symmetric(vertical: 16),
-                textStyle: const TextStyle(
-                  color: Colors.black,
+                textStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
                 //runs when every textfield is filled
                 onSubmit: (String verificationCode) {
                   //TODO::OTP VERTIFCATION
-                  Get.offAll(const HomeScreen());
+                  Get.offAll(() => const HomeScreen());
                 }, // end onSubmit
               ),
               const SizedBox(
@@ -122,11 +122,11 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
           const SizedBox(
             height: 15,
           ),
-          const Text(
+          Text(
             "We've sent an SMS with an activation\ncode to your Phone Number",
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Color.fromARGB(178, 0, 0, 0),
+              color: Theme.of(context).colorScheme.onPrimary,
               fontSize: 16,
             ),
           ),

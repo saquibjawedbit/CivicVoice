@@ -61,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: _appBar(),
       body: Stack(
         children: [
@@ -74,18 +75,27 @@ class _HomeScreenState extends State<HomeScreen> {
   AppBar _appBar() {
     return AppBar(
       centerTitle: true,
-      title: Text(
+      // backgroundColor: Colors.transparent,
+      backgroundColor:
+          Theme.of(context).colorScheme.primary, // Semi-transparent bar
+      toolbarHeight: 84,
+      title: const Text(
         "CIVIC VOICE",
         style: TextStyle(
-          color: Theme.of(context).colorScheme.primary,
-          fontSize: 24,
+          color: Colors.white,
+          fontSize: 32,
+          fontWeight: FontWeight.bold,
         ),
       ),
+      leadingWidth: 72,
       leading: IconButton(
-        onPressed: () {},
+        onPressed: () {
+          //TODO:: OPEN HISTORY
+        },
         icon: const Icon(
           Icons.menu,
           size: 36,
+          color: Colors.white,
         ),
       ),
       actions: [
@@ -93,9 +103,9 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () {
             Get.to(() => const ProfileScreen());
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.account_circle_sharp,
-            color: Theme.of(context).colorScheme.primary,
+            color: Colors.white,
             size: 42,
           ),
         ),
@@ -112,10 +122,13 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: () {
             _captureImage();
           },
-          child: Image.asset(
-            'assets/images/logo-circular.png',
-            height: 136,
-            fit: BoxFit.fill,
+          child: Opacity(
+            opacity: 0.4,
+            child: Image.asset(
+              'assets/images/logo-circular.png',
+              height: 136,
+              fit: BoxFit.fill,
+            ),
           ),
         ),
       ),

@@ -38,6 +38,7 @@ dependencies:
   flutter_otp_text_field: ^1.2.0
   camera: ^0.10.1+1
   get:
+  dropdown_search: ^6.0.1
 
 dev_dependencies:
   flutter_test:
