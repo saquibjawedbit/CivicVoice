@@ -13,6 +13,7 @@ class SubmitDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //TODO:: Make the form Mandatory
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,

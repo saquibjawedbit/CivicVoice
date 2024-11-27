@@ -1,4 +1,5 @@
 import 'package:civic_voice/screens/authentication/sign_up_screen.dart';
+import 'package:civic_voice/screens/profile/history_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const SignUpScreen(),
+      home: HistoryScreen(),
     );
   }
 }
