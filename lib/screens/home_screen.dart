@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:civic_voice/screens/complain/submit_screen.dart';
+import 'package:civic_voice/screens/profile/history_screen.dart';
 import 'package:civic_voice/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -40,7 +41,10 @@ class _HomeScreenState extends State<HomeScreen> {
         // Capture the image and save it as a file
         imageFile = await _cameraController!.takePicture();
         if (imageFile != null) {
-          Get.to(SubmitScreen(imageFile: imageFile!));
+          Get.to(
+            SubmitScreen(imageFile: imageFile!),
+            transition: Transition.fadeIn,
+          );
         }
       } catch (e) {
         debugPrint("Error capturing image: $e");
@@ -90,7 +94,10 @@ class _HomeScreenState extends State<HomeScreen> {
       leadingWidth: 72,
       leading: IconButton(
         onPressed: () {
-          //TODO:: OPEN HISTORY
+          Get.to(
+            () => const HistoryScreen(),
+            transition: Transition.leftToRight,
+          );
         },
         icon: const Icon(
           Icons.menu,
@@ -101,7 +108,10 @@ class _HomeScreenState extends State<HomeScreen> {
       actions: [
         IconButton(
           onPressed: () {
-            Get.to(() => const ProfileScreen());
+            Get.to(
+              () => const ProfileScreen(),
+              transition: Transition.rightToLeft,
+            );
           },
           icon: const Icon(
             Icons.account_circle_sharp,

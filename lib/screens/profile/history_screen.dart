@@ -23,8 +23,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
       imageUrl: '',
     ),
     ComplainModel(
-      id: '1',
-      title: "Hello",
+      id: '2',
+      title: "Yello",
       description: "Lorem Ipsum",
       category: "Dry Waste",
       complaintDate: DateTime(2024, 2, 1),
@@ -33,8 +33,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
       imageUrl: '',
     ),
     ComplainModel(
-      id: '1',
-      title: "Hello",
+      id: '3',
+      title: "Sello",
       description: "Lorem Ipsum",
       category: "Dry Waste",
       complaintDate: DateTime(2024, 2, 1),
@@ -44,15 +44,29 @@ class _HistoryScreenState extends State<HistoryScreen> {
     ),
   ];
 
+  late List<ComplainModel> _filteredItems;
+
+  @override
+  void initState() {
+    _filteredItems = list;
+    super.initState();
+  }
+
   String searchQuery = "";
 
   void _filterList(String query) {
-    // setState(() {
-    //   searchQuery = query.toLowerCase();
-    //   filteredItems = items
-    //       .where((item) => item.toLowerCase().contains(searchQuery))
-    //       .toList();
-    // });
+    setState(() {
+      searchQuery = query.toLowerCase();
+      _filteredItems = list
+          .where((item) => item.title.toLowerCase().contains(searchQuery))
+          .toList();
+    });
+  }
+
+  void _sortList() {
+    setState(() {
+      _filteredItems = _filteredItems.reversed.toList();
+    });
   }
 
   @override
@@ -62,91 +76,88 @@ class _HistoryScreenState extends State<HistoryScreen> {
       appBar: AppBar(
         title: Text(
           "History",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).textTheme.titleSmall,
         ),
+        actions: [
+          IconButton(
+            onPressed: _sortList,
+            icon: const Icon(
+              Icons.sort,
+            ),
+            color: Theme.of(context).colorScheme.primary,
+          )
+        ],
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              onChanged: _filterList,
-              decoration: InputDecoration(
-                labelText: 'Search',
-                labelStyle: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-                prefixIcon: const Icon(
-                  Icons.search,
-                ),
-                prefixIconColor: Theme.of(context).colorScheme.primary,
-                border: _inputBorder(context, 1.2),
-              ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: list.length,
-              itemBuilder: (context, index) => ListTile(
-                title: Text(
-                  list[index].title,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
-                  ),
-                ),
-                subtitle: Text(
-                  list[index].complaintDate.toString().substring(0, 10),
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                ),
-                trailing: Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: list[index].status == 0
-                        ? const Color.fromARGB(255, 234, 211, 4)
-                        : (list[index].status == 1 ? Colors.green : Colors.red),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    list[index].status == 0
-                        ? "Working on it !"
-                        : (list[index].status == 1
-                            ? "Resolved"
-                            : "Not Resolved"),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                onTap: () => Get.to(
-                  () => HistoryDetailScreen(
-                    complainModel: list[index],
-                  ),
-                ),
-              ),
-            ),
-          ),
+          _searchBar(),
+          _historyPage(),
         ],
       ),
     );
   }
 
-  OutlineInputBorder _inputBorder(context, double width) {
-    return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
-      borderSide: BorderSide(
-        color: Theme.of(context).colorScheme.primary,
-        width: width,
+  Expanded _historyPage() {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: _filteredItems.length,
+        itemBuilder: (context, index) => _historyTille(index, context),
+      ),
+    );
+  }
+
+  ListTile _historyTille(int index, BuildContext context) {
+    return ListTile(
+      title: Text(
+        _filteredItems[index].title,
+        style: Theme.of(context).textTheme.labelMedium,
+      ),
+      subtitle: Text(
+        _filteredItems[index].complaintDate.toString().substring(0, 10),
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
+      ),
+      trailing: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        decoration: BoxDecoration(
+          color: _filteredItems[index].status == 0
+              ? const Color.fromARGB(255, 234, 211, 4)
+              : (_filteredItems[index].status == 1 ? Colors.green : Colors.red),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          _filteredItems[index].status == 0
+              ? "Working on it !"
+              : (_filteredItems[index].status == 1
+                  ? "Resolved"
+                  : "Not Resolved"),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+      onTap: () => Get.to(
+        () => HistoryDetailScreen(
+          complainModel: _filteredItems[index],
+        ),
+      ),
+    );
+  }
+
+  Padding _searchBar() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        onChanged: _filterList,
+        decoration: const InputDecoration(
+          labelText: 'Search',
+          prefixIcon: Icon(
+            Icons.search,
+          ),
+        ),
       ),
     );
   }

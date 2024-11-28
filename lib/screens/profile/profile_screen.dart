@@ -8,12 +8,15 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
         centerTitle: true,
-        title: Text(
+        title: const Text(
           "Edit Profile",
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onPrimary,
+            color: Colors.white,
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
@@ -25,15 +28,15 @@ class ProfileScreen extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          _textField("Username"),
-          _textField("Email I'd"),
-          _textField("Phone Number"),
+          _textField("Username", context),
+          _textField("Email I'd", context),
+          _textField("Phone Number", context),
         ],
       ),
     );
   }
 
-  _textField(String title) {
+  _textField(String title, BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       constraints: const BoxConstraints(maxWidth: 600),
@@ -43,27 +46,15 @@ class ProfileScreen extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+            style: Theme.of(context).textTheme.labelSmall,
           ),
           const SizedBox(
             height: 2,
           ),
           TextFormField(
-            cursorColor: const Color.fromARGB(255, 216, 218, 220),
             decoration: InputDecoration(
               labelText: title,
-              border: _inputBorder(),
-              focusedBorder: _inputBorder(),
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
               floatingLabelBehavior: FloatingLabelBehavior.never,
-            ),
-            style: const TextStyle(
-              fontSize: 16,
             ),
           ),
         ],
@@ -71,19 +62,10 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  OutlineInputBorder _inputBorder() {
-    return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
-      borderSide: const BorderSide(
-        color: Color.fromARGB(255, 216, 218, 220),
-      ),
-    );
-  }
-
   Container _imagePicker(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: Theme.of(context).colorScheme.secondary,
+      color: Theme.of(context).colorScheme.primary,
       padding: const EdgeInsets.only(bottom: 8),
       alignment: Alignment.center,
       child: Column(
@@ -98,6 +80,7 @@ class ProfileScreen extends StatelessWidget {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w400,
+              color: Colors.white,
             ),
           ),
         ],

@@ -57,28 +57,7 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
               const SizedBox(
                 height: 32,
               ),
-              OtpTextField(
-                numberOfFields: 4,
-                borderColor: Colors.black,
-                enabledBorderColor: Colors.grey,
-                focusedBorderColor: Theme.of(context).colorScheme.primary,
-                showFieldAsBox: true,
-                fieldWidth: 72,
-                cursorColor: Theme.of(context).colorScheme.primary,
-                autoFocus: true,
-                borderRadius: BorderRadius.circular(15),
-                contentPadding: const EdgeInsets.symmetric(vertical: 16),
-                textStyle: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-                //runs when every textfield is filled
-                onSubmit: (String verificationCode) {
-                  //TODO::OTP VERTIFCATION
-                  Get.offAll(() => const HomeScreen());
-                }, // end onSubmit
-              ),
+              _otpField(context),
               const SizedBox(
                 height: 48,
               ),
@@ -90,17 +69,41 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
     );
   }
 
+  OtpTextField _otpField(BuildContext context) {
+    return OtpTextField(
+      numberOfFields: 4,
+      borderColor: Colors.black,
+      enabledBorderColor: Colors.grey,
+      focusedBorderColor: Theme.of(context).colorScheme.primary,
+      showFieldAsBox: true,
+      fieldWidth: 72,
+      cursorColor: Theme.of(context).colorScheme.primary,
+      autoFocus: true,
+      borderRadius: BorderRadius.circular(15),
+      contentPadding: const EdgeInsets.symmetric(vertical: 16),
+      textStyle: TextStyle(
+        color: Theme.of(context).colorScheme.primary,
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+      ),
+      //runs when every textfield is filled
+      onSubmit: (String verificationCode) {
+        //TODO::OTP VERTIFCATION
+        Get.offAll(
+          () => const HomeScreen(),
+          transition: Transition.fadeIn,
+        );
+      }, // end onSubmit
+    );
+  }
+
   Text _timerAndResendButton(BuildContext context) {
     return Text.rich(
       TextSpan(
         children: [
           TextSpan(
             text: 'Send code again  ',
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+            style: Theme.of(context).textTheme.labelMedium,
           ),
           TextSpan(
             text: '00:${_remainingSeconds.toString().padLeft(2, '0')}',
@@ -125,10 +128,7 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
           Text(
             "We've sent an SMS with an activation\ncode to your Phone Number",
             textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onPrimary,
-              fontSize: 16,
-            ),
+            style: Theme.of(context).textTheme.displayMedium,
           ),
         ],
       ),

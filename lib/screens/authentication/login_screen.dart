@@ -24,46 +24,7 @@ class LoginScreen extends StatelessWidget {
                   "assets/images/logo-1.png",
                   width: 320,
                 ),
-                Form(
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        cursorColor: Theme.of(context).colorScheme.primary,
-                        keyboardType: const TextInputType.numberWithOptions(),
-                        decoration: InputDecoration(
-                          labelText: "Enter your Phone Number",
-                          labelStyle: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
-                          border: _inputBorder(context, 1.2),
-                          focusedBorder: _inputBorder(context, 1.6),
-                          enabledBorder: _inputBorder(context, 1.2),
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 18,
-                            horizontal: 16,
-                          ),
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                        ),
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      PrimaryBlueButton(
-                        text: "Verify Phone Number",
-                        textColor: Colors.white,
-                        bgColor: Theme.of(context).colorScheme.primary,
-                        onTap: () {
-                          //TODO::SENT OTP
-                          Get.to(() => const OtpVerifyScreen());
-                        },
-                      ),
-                    ],
-                  ),
-                ),
+                _form(context),
               ],
             ),
           ),
@@ -72,12 +33,35 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  OutlineInputBorder _inputBorder(context, double width) {
-    return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
-      borderSide: BorderSide(
-        color: Theme.of(context).colorScheme.primary,
-        width: width,
+  Form _form(BuildContext context) {
+    return Form(
+      child: Column(
+        children: [
+          TextFormField(
+            cursorColor: Theme.of(context).colorScheme.primary,
+            keyboardType: const TextInputType.numberWithOptions(),
+            decoration: const InputDecoration(
+              labelText: "Enter your Phone Number",
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 18,
+                horizontal: 16,
+              ),
+            ),
+            style: Theme.of(context).textTheme.labelMedium,
+          ),
+          const SizedBox(
+            height: 12,
+          ),
+          PrimaryBlueButton(
+            text: "Verify Phone Number",
+            textColor: Colors.white,
+            bgColor: Theme.of(context).colorScheme.primary,
+            onTap: () {
+              //TODO::SENT OTP
+              Get.to(() => const OtpVerifyScreen());
+            },
+          ),
+        ],
       ),
     );
   }

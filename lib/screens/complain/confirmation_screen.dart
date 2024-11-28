@@ -32,25 +32,16 @@ class ConfirmationScreen extends StatelessWidget {
                     ),
                     padding:
                         const EdgeInsets.symmetric(vertical: 36, horizontal: 8),
-                    child: Column(
-                      children: [
-                        _blueText(context,
-                            "You’re Complaint has been successfully filled !"),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        _blueText(context,
-                            "We will notify you as soon as there is any update  !"),
-                      ],
-                    ),
+                    child: _detailContainer(context),
                   ),
                 ],
               ),
               PrimaryBlueButton(
                 text: "Home",
                 textColor: Colors.white,
-                onTap: () => Get.to(
+                onTap: () => Get.offAll(
                   () => const HomeScreen(),
+                  transition: Transition.fade,
                 ),
               ),
             ],
@@ -60,15 +51,24 @@ class ConfirmationScreen extends StatelessWidget {
     );
   }
 
+  Column _detailContainer(BuildContext context) {
+    return Column(
+      children: [
+        _blueText(context, "You’re Complaint has been successfully filled !"),
+        const SizedBox(
+          height: 12,
+        ),
+        _blueText(
+            context, "We will notify you as soon as there is any update  !"),
+      ],
+    );
+  }
+
   Text _blueText(BuildContext context, String text) {
     return Text(
       text,
       textAlign: TextAlign.center,
-      style: TextStyle(
-        color: Theme.of(context).colorScheme.primary,
-        fontSize: 24,
-        fontWeight: FontWeight.w600,
-      ),
+      style: Theme.of(context).textTheme.titleSmall,
     );
   }
 }
