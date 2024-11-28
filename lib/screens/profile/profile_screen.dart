@@ -5,6 +5,8 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //TODO:: Allow upload of photo
+    //TODO:: Allow upload of data
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
