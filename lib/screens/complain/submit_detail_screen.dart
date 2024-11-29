@@ -1,21 +1,47 @@
 import 'package:camera/camera.dart';
 import 'package:civic_voice/components/buttons/primary_blue_button.dart';
 import 'package:civic_voice/components/constants/category_complaint.dart';
+import 'package:civic_voice/components/controller/db_controller.dart';
+import 'package:civic_voice/components/controller/location_controller.dart';
+import 'package:civic_voice/components/models/complain_model.dart';
 import 'package:civic_voice/screens/complain/confirmation_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
-class SubmitDetailScreen extends StatelessWidget {
-  SubmitDetailScreen({super.key, required this.image});
+class SubmitDetailScreen extends StatefulWidget {
+  const SubmitDetailScreen({super.key, required this.image});
 
   final XFile image;
+
+  @override
+  State<SubmitDetailScreen> createState() => _SubmitDetailScreenState();
+}
+
+class _SubmitDetailScreenState extends State<SubmitDetailScreen> {
   final _formKey = GlobalKey<FormState>();
+
   final TextEditingController addressController = TextEditingController();
+
   final TextEditingController landmarkController = TextEditingController();
+
   final TextEditingController titleController = TextEditingController();
+
   final TextEditingController descriptionController = TextEditingController();
+  String? category;
+
+  final LocationController _locationController = Get.find();
+  final DBController _dbController = Get.find();
+
+  @override
+  void initState() {
+    setState(() {
+      addressController.text = _locationController.address;
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,9 +148,20 @@ class SubmitDetailScreen extends StatelessWidget {
 
   void _onSubmit() {
     if (_formKey.currentState!.validate()) {
+      ComplainModel complainModel = ComplainModel(
+        title: titleController.value.text,
+        description: descriptionController.value.text,
+        category: category!,
+        complaintDate: DateTime.now(),
+        address: addressController.value.text,
+        landMark: landmarkController.value.text,
+        imageUrl: category!,
+        userId: FirebaseAuth.instance.currentUser!.uid,
+      );
+
+      _dbController.storeComplain(complainModel);
+
       Get.offAll(() => const ConfirmationScreen());
-    } else {
-      Get.snackbar("Error!", "Something went wrong!");
     }
   }
 
@@ -161,6 +198,12 @@ class SubmitDetailScreen extends StatelessWidget {
 
   Widget _dropDownSearch(context) {
     return DropdownSearch<String>(
+      validator: (value) {
+        if (value == null) {
+          return "Required";
+        }
+        return null;
+      },
       popupProps: PopupProps.menu(
         fit: FlexFit.loose,
         itemBuilder: (context, item, isDisabled, isSelected) => Padding(
@@ -190,7 +233,7 @@ class SubmitDetailScreen extends StatelessWidget {
             ),
       ),
       onChanged: (String? selectedItem) {
-        debugPrint('Selected item: $selectedItem');
+        category = selectedItem;
       },
     );
   }

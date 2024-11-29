@@ -43,9 +43,10 @@ class _HomeScreenState extends State<HomeScreen> {
       try {
         // Capture the image and save it as a file
         imageFile = await _cameraController!.takePicture();
+        _locationController.requestAddress();
         if (imageFile != null) {
           Get.to(
-            SubmitScreen(imageFile: imageFile!),
+            () => SubmitScreen(imageFile: imageFile!),
             transition: Transition.fadeIn,
           );
         }
@@ -132,9 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 24),
         child: InkWell(
-          onTap: () {
-            _captureImage();
-          },
+          onTap: _captureImage,
           child: Opacity(
             opacity: 0.4,
             child: Image.asset(

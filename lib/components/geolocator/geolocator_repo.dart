@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
@@ -13,7 +12,7 @@ class GeolocatorRepo {
     distanceFilter: 0,
   );
 
-  Future<Position> _determineLocation() async {
+  Future<bool> requestPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -23,7 +22,7 @@ class GeolocatorRepo {
       // Location services are not enabled don't continue
       // accessing the position and request users of the
       // App to enable the location services.
-      return Future.error('Location services are disabled.');
+      return false;
     }
 
     permission = await Geolocator.checkPermission();
@@ -35,18 +34,25 @@ class GeolocatorRepo {
         // Android's shouldShowRequestPermissionRationale
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
+        return false;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      return false;
     }
 
+    return true;
+  }
+
+  Future<Position> _determineLocation() async {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
+    bool permission = await requestPermission();
+
+    if (!permission) return Future.error("Location service is disabeled");
+
     Position position =
         await Geolocator.getCurrentPosition(locationSettings: locationSettings);
 
@@ -57,7 +63,16 @@ class GeolocatorRepo {
     Position position = await _determineLocation();
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
-    debugPrint(placemarks[0].toString());
-    return "Ranchi";
+    Map<String, dynamic> addressFields = placemarks[0].toJson();
+
+    String address = "";
+
+    for (var entry in addressFields.entries) {
+      if (entry.value != null && entry.value.toString().isNotEmpty) {
+        address += "${entry.value}, ";
+      }
+    }
+
+    return address;
   }
 }

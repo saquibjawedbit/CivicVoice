@@ -1,4 +1,7 @@
+import 'package:civic_voice/components/controller/db_controller.dart';
+import 'package:civic_voice/components/models/user_model.dart';
 import 'package:civic_voice/screens/authentication/otp_verify_screen.dart';
+import 'package:civic_voice/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,6 +10,7 @@ class AuthenticationRepo {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   late String verificationId;
+  late String phoneNumber;
 
   void sendOTP(String phoneNumber) async {
     await FirebaseAuth.instance.verifyPhoneNumber(
@@ -27,6 +31,7 @@ class AuthenticationRepo {
         // Update the UI - wait for the user to enter the SMS code
         debugPrint("OTP SENT!");
         this.verificationId = verificationId;
+        this.phoneNumber = phoneNumber;
         Get.to(() => const OtpVerifyScreen());
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
@@ -40,5 +45,10 @@ class AuthenticationRepo {
 
     // Sign the user in (or link) with the credential
     await auth.signInWithCredential(credential);
+
+    final DBController controller = Get.find();
+    controller.storeUser(UserModel(phoneNumber: phoneNumber));
+
+    Get.offAll(() => const HomeScreen());
   }
 }

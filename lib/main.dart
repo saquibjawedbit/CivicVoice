@@ -1,6 +1,6 @@
 import 'package:civic_voice/components/constants/colors.dart';
+import 'package:civic_voice/components/controller/db_controller.dart';
 import 'package:civic_voice/screens/authentication/sign_up_screen.dart';
-import 'package:civic_voice/screens/authentication/splash_screen.dart';
 import 'package:civic_voice/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +13,13 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final DBController controller = Get.put(DBController());
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +29,11 @@ class MyApp extends StatelessWidget {
       home: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.userChanges(),
           builder: (context, snapshot) {
-            if (snapshot.hasData && snapshot.data == null) {
+            debugPrint("Rebuilding");
+            if (!snapshot.hasData) {
               return const SignUpScreen();
-            } else if (snapshot.hasData && snapshot.data != null) {
-              return const HomeScreen();
             }
-
-            return const SplashScreen();
+            return const HomeScreen();
           }),
     );
   }

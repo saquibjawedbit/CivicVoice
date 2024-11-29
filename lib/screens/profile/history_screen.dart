@@ -11,38 +11,40 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-  final List<ComplainModel> list = [
-    ComplainModel(
-      id: '1',
-      title: "Hello",
-      description: "Lorem Ipsum",
-      category: "Dry Waste",
-      complaintDate: DateTime(2024, 2, 1),
-      address: "India",
-      landMark: "India",
-      imageUrl: '',
-    ),
-    ComplainModel(
-      id: '2',
-      title: "Yello",
-      description: "Lorem Ipsum",
-      category: "Dry Waste",
-      complaintDate: DateTime(2024, 2, 1),
-      address: "India",
-      landMark: "India",
-      imageUrl: '',
-    ),
-    ComplainModel(
-      id: '3',
-      title: "Sello",
-      description: "Lorem Ipsum",
-      category: "Dry Waste",
-      complaintDate: DateTime(2024, 2, 1),
-      address: "India",
-      landMark: "India",
-      imageUrl: '',
-    ),
-  ];
+  // final List<ComplainModel> list = [
+  //   ComplainModel(
+  //     id: '1',
+  //     title: "Hello",
+  //     description: "Lorem Ipsum",
+  //     category: "Dry Waste",
+  //     complaintDate: DateTime(2024, 2, 1),
+  //     address: "India",
+  //     landMark: "India",
+  //     imageUrl: '',
+  //   ),
+  //   ComplainModel(
+  //     id: '2',
+  //     title: "Yello",
+  //     description: "Lorem Ipsum",
+  //     category: "Dry Waste",
+  //     complaintDate: DateTime(2024, 2, 1),
+  //     address: "India",
+  //     landMark: "India",
+  //     imageUrl: '',
+  //   ),
+  //   ComplainModel(
+  //     id: '3',
+  //     title: "Sello",
+  //     description: "Lorem Ipsum",
+  //     category: "Dry Waste",
+  //     complaintDate: DateTime(2024, 2, 1),
+  //     address: "India",
+  //     landMark: "India",
+  //     imageUrl: '',
+  //   ),
+  // ];
+
+  final List<ComplainModel> list = [];
 
   late List<ComplainModel> _filteredItems;
 
