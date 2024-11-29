@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:civic_voice/components/controller/location_controller.dart';
 import 'package:civic_voice/screens/complain/submit_screen.dart';
 import 'package:civic_voice/screens/profile/history_screen.dart';
 import 'package:civic_voice/screens/profile/profile_screen.dart';
@@ -16,6 +17,8 @@ class _HomeScreenState extends State<HomeScreen> {
   CameraController? _cameraController;
   late List<CameraDescription> cameras;
   XFile? imageFile;
+
+  final LocationController _locationController = Get.put(LocationController());
 
   @override
   void initState() {

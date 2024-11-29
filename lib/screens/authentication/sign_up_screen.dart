@@ -71,7 +71,7 @@ class SignUpScreen extends StatelessWidget {
       bgColor: bgColor,
       onTap: () {
         Get.to(
-          () => const LoginScreen(),
+          () => LoginScreen(),
           transition: Transition.rightToLeftWithFade,
         );
       },

@@ -1,1 +1,25 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"civic-voice-a2f10","appId":"1:933883536970:android:079d53e1dd16477e76e8b3","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"civic-voice-a2f10","configurations":{"android":"1:933883536970:android:079d53e1dd16477e76e8b3","ios":"1:933883536970:ios:6a1db5583d0d1df976e8b3","macos":"1:933883536970:ios:6a1db5583d0d1df976e8b3","web":"1:933883536970:web:3163e21cbe7034fe76e8b3","windows":"1:933883536970:web:1f98c79f35ebd66376e8b3"}}}}}}
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "civic-voice-a2f10",
+                    "appId": "1:933883536970:android:079d53e1dd16477e76e8b3",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "civic-voice-a2f10",
+                    "configurations": {
+                        "android": "1:933883536970:android:079d53e1dd16477e76e8b3",
+                        "ios": "1:933883536970:ios:6a1db5583d0d1df976e8b3",
+                        "macos": "1:933883536970:ios:6a1db5583d0d1df976e8b3",
+                        "web": "1:933883536970:web:3163e21cbe7034fe76e8b3",
+                        "windows": "1:933883536970:web:1f98c79f35ebd66376e8b3"
+                    }
+                }
+            }
+        }
+    }
+}

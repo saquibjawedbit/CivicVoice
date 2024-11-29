@@ -8,13 +8,17 @@ import 'package:get/get.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
 class SubmitDetailScreen extends StatelessWidget {
-  const SubmitDetailScreen({super.key, required this.image});
+  SubmitDetailScreen({super.key, required this.image});
 
   final XFile image;
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController landmarkController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    //TODO:: Make the form Mandatory
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -40,30 +44,74 @@ class SubmitDetailScreen extends StatelessWidget {
           height: 20,
         ),
         Form(
+          key: _formKey,
           child: Column(
             children: [
-              _textField(context, "Confirm / Edit Address"),
+              _textField(
+                context,
+                "Confirm / Edit Address",
+                addressController,
+                (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Required";
+                  }
+
+                  return null;
+                },
+              ),
               const SizedBox(height: 8),
-              _textField(context, "Enter Nearby Landmark"),
+              _textField(
+                context,
+                "Enter Nearby Landmark",
+                landmarkController,
+                (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Required";
+                  }
+
+                  return null;
+                },
+              ),
               const SizedBox(height: 8),
-              _textField(context, "Enter Title"),
+              _textField(
+                context,
+                "Enter Title",
+                titleController,
+                (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Required";
+                  } else if (value.length >= 80) {
+                    return "Title should be less than 80 characters";
+                  }
+
+                  return null;
+                },
+              ),
               const SizedBox(height: 8),
               _dropDownSearch(context),
               const SizedBox(height: 8),
               _textField(
-                  context, "Breifly Explain Your Comments in 10 to 100 words",
-                  length: 400, maxLines: 8),
+                context,
+                "Breifly Explain Your Comments in 10 to 100 words",
+                descriptionController,
+                (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Required";
+                  } else if (value.length >= 80) {
+                    return "Description should be less than 300 characters";
+                  }
+
+                  return null;
+                },
+                length: 400,
+                maxLines: 8,
+              ),
               const SizedBox(height: 12),
               PrimaryBlueButton(
                 text: "Next",
                 textColor: Colors.white,
                 bgColor: Theme.of(context).colorScheme.primary,
-                onTap: () {
-                  Get.to(
-                    () => const ConfirmationScreen(),
-                    transition: Transition.rightToLeftWithFade,
-                  );
-                },
+                onTap: _onSubmit,
               )
             ],
           ),
@@ -72,7 +120,16 @@ class SubmitDetailScreen extends StatelessWidget {
     );
   }
 
+  void _onSubmit() {
+    if (_formKey.currentState!.validate()) {
+      Get.offAll(() => const ConfirmationScreen());
+    } else {
+      Get.snackbar("Error!", "Something went wrong!");
+    }
+  }
+
   Column _textField(BuildContext context, String text,
+      TextEditingController controller, String? Function(String?)? validator,
       {int? maxLines, int length = 50}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,6 +138,8 @@ class SubmitDetailScreen extends StatelessWidget {
           height: 2,
         ),
         TextFormField(
+          controller: controller,
+          validator: validator,
           maxLength: length,
           maxLines: maxLines,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,

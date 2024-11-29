@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:civic_voice/screens/home_screen.dart';
+import 'package:civic_voice/components/controller/authentication_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:get/get.dart';
@@ -15,6 +15,8 @@ class OtpVerifyScreen extends StatefulWidget {
 class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
   late int _remainingSeconds;
   Timer? _timer;
+
+  final AuthenticationController _authenticationController = Get.find();
 
   @override
   void initState() {
@@ -71,12 +73,12 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
 
   OtpTextField _otpField(BuildContext context) {
     return OtpTextField(
-      numberOfFields: 4,
+      numberOfFields: 6,
       borderColor: Colors.black,
       enabledBorderColor: Colors.grey,
       focusedBorderColor: Theme.of(context).colorScheme.primary,
       showFieldAsBox: true,
-      fieldWidth: 72,
+      fieldWidth: 44,
       cursorColor: Theme.of(context).colorScheme.primary,
       autoFocus: true,
       borderRadius: BorderRadius.circular(15),
@@ -88,11 +90,8 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
       ),
       //runs when every textfield is filled
       onSubmit: (String verificationCode) {
-        //TODO::OTP VERTIFCATION
-        Get.offAll(
-          () => const HomeScreen(),
-          transition: Transition.fadeIn,
-        );
+        //Submit...
+        _authenticationController.verifyOTP(verificationCode);
       }, // end onSubmit
     );
   }

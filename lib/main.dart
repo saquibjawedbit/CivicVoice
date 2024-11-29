@@ -1,5 +1,8 @@
 import 'package:civic_voice/components/constants/colors.dart';
 import 'package:civic_voice/screens/authentication/sign_up_screen.dart';
+import 'package:civic_voice/screens/authentication/splash_screen.dart';
+import 'package:civic_voice/screens/home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,65 +23,99 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Civic Voice',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-          surface: Colors.white,
-          primary: primaryColor,
-          onPrimary: onPrimaryColor,
-        ),
-        iconTheme: const IconThemeData(
-          color: primaryColor, // Set the default icon color to primary
-        ),
-        textTheme: const TextTheme(
-          displayLarge: TextStyle(
-            color: primaryColor,
-            fontSize: 28,
-            fontWeight: FontWeight.w700,
-          ),
-          displayMedium: TextStyle(
-            color: onPrimaryColor,
-            fontSize: 18,
-          ),
-          labelMedium: TextStyle(
-            color: primaryColor,
-            fontWeight: FontWeight.w600,
-            fontSize: 18,
-          ),
-          labelSmall: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-          titleLarge: TextStyle(
-            color: primaryColor,
-            fontSize: 72,
-            fontWeight: FontWeight.bold,
-            height: 0.8,
-          ),
-          titleSmall: TextStyle(
-            color: primaryColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          labelStyle: const TextStyle(
-            color: onPrimaryColor,
-          ),
-          prefixIconColor: primaryColor,
-          hintStyle: TextStyle(
-            color: onPrimaryColor.withOpacity(0.6),
-          ),
-          border: _inputBorder(context, 1.2),
-          enabledBorder: _inputBorder(context, 1.2),
-        ),
-        primaryIconTheme: IconThemeData(
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        useMaterial3: true,
+      theme: _theme(context),
+      home: StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.userChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data == null) {
+              return const SignUpScreen();
+            } else if (snapshot.hasData && snapshot.data != null) {
+              return const HomeScreen();
+            }
+
+            return const SplashScreen();
+          }),
+    );
+  }
+
+  ThemeData _theme(BuildContext context) {
+    return ThemeData(
+      colorScheme: _colorScheme(),
+      iconTheme: _iconTheme(),
+      textTheme: _textTheme(),
+      inputDecorationTheme: _inputTheme(context),
+      primaryIconTheme: _primaryIconTheme(context),
+      useMaterial3: true,
+    );
+  }
+
+  IconThemeData _primaryIconTheme(BuildContext context) {
+    return IconThemeData(
+      color: Theme.of(context).colorScheme.primary,
+    );
+  }
+
+  InputDecorationTheme _inputTheme(BuildContext context) {
+    return InputDecorationTheme(
+      labelStyle: const TextStyle(
+        color: onPrimaryColor,
       ),
-      home: const SignUpScreen(),
+      prefixIconColor: primaryColor,
+      hintStyle: TextStyle(
+        color: onPrimaryColor.withOpacity(0.6),
+      ),
+      border: _inputBorder(context, 1.2),
+      enabledBorder: _inputBorder(context, 1.2),
+    );
+  }
+
+  TextTheme _textTheme() {
+    return const TextTheme(
+      displayLarge: TextStyle(
+        color: primaryColor,
+        fontSize: 28,
+        fontWeight: FontWeight.w700,
+      ),
+      displayMedium: TextStyle(
+        color: onPrimaryColor,
+        fontSize: 18,
+      ),
+      labelMedium: TextStyle(
+        color: primaryColor,
+        fontWeight: FontWeight.w600,
+        fontSize: 18,
+      ),
+      labelSmall: TextStyle(
+        color: Colors.black,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+      ),
+      titleLarge: TextStyle(
+        color: primaryColor,
+        fontSize: 72,
+        fontWeight: FontWeight.bold,
+        height: 0.8,
+      ),
+      titleSmall: TextStyle(
+        color: primaryColor,
+        fontWeight: FontWeight.bold,
+        fontSize: 24,
+      ),
+    );
+  }
+
+  IconThemeData _iconTheme() {
+    return const IconThemeData(
+      color: primaryColor, // Set the default icon color to primary
+    );
+  }
+
+  ColorScheme _colorScheme() {
+    return ColorScheme.fromSeed(
+      seedColor: Colors.blue,
+      surface: Colors.white,
+      primary: primaryColor,
+      onPrimary: onPrimaryColor,
     );
   }
 
