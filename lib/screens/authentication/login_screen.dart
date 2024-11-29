@@ -3,13 +3,22 @@ import 'package:civic_voice/components/controller/authentication_controller.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final AuthenticationController controller =
       Get.put(AuthenticationController());
+
   final _formKey = GlobalKey<FormState>();
+
   final TextEditingController phoneNumberController = TextEditingController();
+
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +30,25 @@ class LoginScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(
             horizontal: 24,
           ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Image.asset(
-                  "assets/images/logo-1.png",
-                  width: 320,
+          child: Stack(
+            children: [
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Image.asset(
+                      "assets/images/logo-1.png",
+                      width: 320,
+                    ),
+                    _form(context),
+                  ],
                 ),
-                _form(context),
-              ],
-            ),
+              ),
+              if (_isLoading)
+                const Align(
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator()),
+            ],
           ),
         ),
       ),
@@ -75,11 +92,17 @@ class LoginScreen extends StatelessWidget {
             text: "Verify Phone Number",
             textColor: Colors.white,
             bgColor: Theme.of(context).colorScheme.primary,
-            onTap: () {
+            onTap: () async {
               //SENDS OTP
               if (_formKey.currentState!.validate()) {
-                controller
+                setState(() {
+                  _isLoading = true;
+                });
+                await controller
                     .sendOTP("+91${phoneNumberController.text.toLowerCase()}");
+                setState(() {
+                  _isLoading = false;
+                });
               }
             },
           ),

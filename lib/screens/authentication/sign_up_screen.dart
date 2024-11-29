@@ -13,9 +13,13 @@ class SignUpScreen extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 36),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [_headerText(context), _footerText(context)],
+          child: Stack(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [_headerText(context), _footerText(context)],
+              ),
+            ],
           ),
         ),
       ),
@@ -71,7 +75,7 @@ class SignUpScreen extends StatelessWidget {
       bgColor: bgColor,
       onTap: () {
         Get.to(
-          () => LoginScreen(),
+          () => const LoginScreen(),
           transition: Transition.rightToLeftWithFade,
         );
       },

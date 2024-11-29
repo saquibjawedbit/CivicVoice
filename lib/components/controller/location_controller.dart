@@ -12,7 +12,7 @@ class LocationController extends GetxController {
     await _geolocatorRepo.requestPermission();
   }
 
-  void requestAddress() async {
+  Future<void> requestAddress() async {
     _address = await _geolocatorRepo.getAddress();
   }
 

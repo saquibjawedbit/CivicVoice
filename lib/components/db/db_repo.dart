@@ -13,8 +13,24 @@ class DbRepo {
     }
   }
 
+  void updateUser(Map<String, dynamic> data, String collection, String uid) {
+    db.collection(collection).doc(uid).set(data, SetOptions(merge: true));
+  }
+
+  Future<Map<String, dynamic>> getData(String collection, String uid) async {
+    final docRef = db.collection(collection).doc(uid);
+    final docSnapshot = await docRef.get();
+    return {
+      "id": docSnapshot.id,
+      "data": docSnapshot.data(),
+    };
+  }
+
   void storeIfNeccessary(
-      Map<String, dynamic> data, String uid, String collections) async {
+    Map<String, dynamic> data,
+    String collections,
+    String uid,
+  ) async {
     final docRef = db.collection(collections).doc(uid);
     final docSnapshot = await docRef.get();
 

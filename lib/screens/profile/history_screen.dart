@@ -49,7 +49,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO:: fetch and show history
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

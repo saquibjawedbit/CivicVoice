@@ -18,6 +18,8 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
 
   final AuthenticationController _authenticationController = Get.find();
 
+  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -49,23 +51,32 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Center(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 100,
+        child: Stack(
+          children: [
+            Center(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 100,
+                  ),
+                  _upMetaData(),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  _otpField(context),
+                  const SizedBox(
+                    height: 48,
+                  ),
+                  _timerAndResendButton(context)
+                ],
               ),
-              _upMetaData(),
-              const SizedBox(
-                height: 32,
+            ),
+            if (_isLoading)
+              const Align(
+                alignment: Alignment.center,
+                child: CircularProgressIndicator(),
               ),
-              _otpField(context),
-              const SizedBox(
-                height: 48,
-              ),
-              _timerAndResendButton(context)
-            ],
-          ),
+          ],
         ),
       ),
     );
@@ -89,9 +100,16 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
         fontWeight: FontWeight.bold,
       ),
       //runs when every textfield is filled
-      onSubmit: (String verificationCode) {
+      onSubmit: (String verificationCode) async {
         //Submit...
-        _authenticationController.verifyOTP(verificationCode);
+        setState(() {
+          _isLoading = true;
+        });
+        await _authenticationController.verifyOTP(verificationCode);
+
+        setState(() {
+          _isLoading = false;
+        });
       }, // end onSubmit
     );
   }

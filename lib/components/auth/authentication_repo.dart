@@ -12,7 +12,7 @@ class AuthenticationRepo {
   late String verificationId;
   late String phoneNumber;
 
-  void sendOTP(String phoneNumber) async {
+  Future<void> sendOTP(String phoneNumber) async {
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       timeout: const Duration(seconds: 60),
@@ -38,7 +38,7 @@ class AuthenticationRepo {
     );
   }
 
-  void verifyOTP(String smsCode) async {
+  Future<void> verifyOTP(String smsCode) async {
     // Create a PhoneAuthCredential with the code
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId, smsCode: smsCode);

@@ -4,11 +4,11 @@ import 'package:get/get.dart';
 class AuthenticationController extends GetxController {
   final AuthenticationRepo _auth = AuthenticationRepo();
 
-  void sendOTP(String phoneNumber) {
-    _auth.sendOTP(phoneNumber);
+  Future<void> sendOTP(String phoneNumber) async {
+    await _auth.sendOTP(phoneNumber);
   }
 
-  void verifyOTP(String code) {
-    _auth.verifyOTP(code);
+  Future<void> verifyOTP(String code) async {
+    await _auth.verifyOTP(code);
   }
 }

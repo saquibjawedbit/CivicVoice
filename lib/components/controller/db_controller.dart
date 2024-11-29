@@ -10,9 +10,30 @@ class DBController extends GetxController {
   final DbRepo _db = DbRepo();
   final storage = FirebaseStorage.instance;
 
+  late UserModel? _user;
+
+  UserModel? get user => _user;
+
   void storeUser(UserModel user) {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     _db.storeIfNeccessary(user.toMap(), "users", uid);
+  }
+
+  @override
+  void onInit() {
+    getUser();
+    super.onInit();
+  }
+
+  Future<void> getUser() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    Map<String, dynamic> mp = await _db.getData("users", uid);
+    _user = UserModel.fromMap(mp['data'], uid);
+  }
+
+  void updateUser(UserModel user) {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    _db.updateUser(user.toMap(), "users", uid);
   }
 
   void storeComplain(ComplainModel complain) {

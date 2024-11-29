@@ -22,4 +22,15 @@ class UserModel {
       'complaintCount': complaintCount,
     };
   }
+
+  // Factory constructor to create a UserModel instance from a map
+  factory UserModel.fromMap(Map<String, dynamic> map, String uid) {
+    return UserModel(
+      id: uid, // Assuming the 'id' field is also in the map
+      email: map['email'],
+      phoneNumber: map['phoneNumber'],
+      name: map['name'],
+      complaintCount: map['complaintCount'] ?? 0,
+    );
+  }
 }

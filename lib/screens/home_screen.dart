@@ -18,6 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
   late List<CameraDescription> cameras;
   XFile? imageFile;
 
+  bool _isLoading = false;
+
   final LocationController _locationController = Get.put(LocationController());
 
   @override
@@ -44,7 +46,10 @@ class _HomeScreenState extends State<HomeScreen> {
       try {
         // Capture the image and save it as a file
         imageFile = await _cameraController!.takePicture();
-        _locationController.requestAddress();
+        setState(() {
+          _isLoading = true;
+        });
+        await _locationController.requestAddress();
         if (imageFile != null) {
           Get.to(
             () => SubmitScreen(imageFile: imageFile!),
@@ -54,6 +59,10 @@ class _HomeScreenState extends State<HomeScreen> {
       } catch (e) {
         debugPrint("Error capturing image: $e");
       }
+
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -75,7 +84,14 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         children: [
           SizedBox.expand(child: CameraPreview(_cameraController!)),
-          _captureButton()
+          if (_isLoading)
+            const Align(
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
+            ),
+          if (!_isLoading) _captureButton()
         ],
       ),
     );

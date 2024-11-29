@@ -51,7 +51,7 @@ class GeolocatorRepo {
     // continue accessing the position of the device.
     bool permission = await requestPermission();
 
-    if (!permission) return Future.error("Location service is disabeled");
+    if (!permission) return Future.error("Location service is disabled");
 
     Position position =
         await Geolocator.getCurrentPosition(locationSettings: locationSettings);
