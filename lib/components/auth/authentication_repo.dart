@@ -38,17 +38,23 @@ class AuthenticationRepo {
     );
   }
 
-  Future<void> verifyOTP(String smsCode) async {
+  Future<bool> verifyOTP(String smsCode) async {
     // Create a PhoneAuthCredential with the code
-    PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: verificationId, smsCode: smsCode);
+    try {
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: verificationId, smsCode: smsCode);
 
-    // Sign the user in (or link) with the credential
-    await auth.signInWithCredential(credential);
+      // Sign the user in (or link) with the credential
+      await auth.signInWithCredential(credential);
 
-    final DBController controller = Get.find();
-    controller.storeUser(UserModel(phoneNumber: phoneNumber));
+      final DBController controller = Get.find();
+      controller.storeUser(UserModel(phoneNumber: phoneNumber));
 
-    Get.offAll(() => const HomeScreen());
+      Get.offAll(() => const HomeScreen());
+
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

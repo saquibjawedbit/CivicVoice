@@ -46,8 +46,9 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               if (_isLoading)
                 const Align(
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator()),
+                  alignment: Alignment.center,
+                  child: CircularProgressIndicator(),
+                ),
             ],
           ),
         ),

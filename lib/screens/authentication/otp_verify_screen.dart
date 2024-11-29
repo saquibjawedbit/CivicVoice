@@ -84,6 +84,7 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
 
   OtpTextField _otpField(BuildContext context) {
     return OtpTextField(
+      clearText: true,
       numberOfFields: 6,
       borderColor: Colors.black,
       enabledBorderColor: Colors.grey,
@@ -105,7 +106,12 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
         setState(() {
           _isLoading = true;
         });
-        await _authenticationController.verifyOTP(verificationCode);
+        bool value =
+            await _authenticationController.verifyOTP(verificationCode);
+
+        if (!value) {
+          Get.snackbar("Invalid OTP", "Please enter correct OTP");
+        }
 
         setState(() {
           _isLoading = false;

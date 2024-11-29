@@ -8,7 +8,8 @@ class AuthenticationController extends GetxController {
     await _auth.sendOTP(phoneNumber);
   }
 
-  Future<void> verifyOTP(String code) async {
-    await _auth.verifyOTP(code);
+  Future<bool> verifyOTP(String code) async {
+    bool value = await _auth.verifyOTP(code);
+    return value;
   }
 }
