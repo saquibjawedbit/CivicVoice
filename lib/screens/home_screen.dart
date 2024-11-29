@@ -33,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ResolutionPreset.high,
     );
     await _cameraController!.initialize();
+    _locationController.requestPermission();
     if (mounted) {
       setState(() {});
     }

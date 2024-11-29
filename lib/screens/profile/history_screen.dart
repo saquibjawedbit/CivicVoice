@@ -1,3 +1,4 @@
+import 'package:civic_voice/components/controller/db_controller.dart';
 import 'package:civic_voice/components/models/complain_model.dart';
 import 'package:civic_voice/screens/profile/history_detail_screen.dart';
 import 'package:flutter/material.dart';
@@ -11,47 +12,22 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-  // final List<ComplainModel> list = [
-  //   ComplainModel(
-  //     id: '1',
-  //     title: "Hello",
-  //     description: "Lorem Ipsum",
-  //     category: "Dry Waste",
-  //     complaintDate: DateTime(2024, 2, 1),
-  //     address: "India",
-  //     landMark: "India",
-  //     imageUrl: '',
-  //   ),
-  //   ComplainModel(
-  //     id: '2',
-  //     title: "Yello",
-  //     description: "Lorem Ipsum",
-  //     category: "Dry Waste",
-  //     complaintDate: DateTime(2024, 2, 1),
-  //     address: "India",
-  //     landMark: "India",
-  //     imageUrl: '',
-  //   ),
-  //   ComplainModel(
-  //     id: '3',
-  //     title: "Sello",
-  //     description: "Lorem Ipsum",
-  //     category: "Dry Waste",
-  //     complaintDate: DateTime(2024, 2, 1),
-  //     address: "India",
-  //     landMark: "India",
-  //     imageUrl: '',
-  //   ),
-  // ];
-
-  final List<ComplainModel> list = [];
+  List<ComplainModel> list = [];
 
   late List<ComplainModel> _filteredItems;
+  final DBController _dbController = Get.find();
 
   @override
   void initState() {
-    _filteredItems = list;
+    _loadData();
     super.initState();
+  }
+
+  void _loadData() async {
+    list = await _dbController.getHistory();
+    setState(() {
+      _filteredItems = list;
+    });
   }
 
   String searchQuery = "";
@@ -100,7 +76,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
   }
 
-  Expanded _historyPage() {
+  Widget _historyPage() {
+    if (list.isEmpty) {
+      return Expanded(
+        child: Center(
+          child: Text(
+            "You have no complains to track",
+            style: Theme.of(context).textTheme.labelMedium,
+          ),
+        ),
+      );
+    }
+
     return Expanded(
       child: ListView.builder(
         itemCount: _filteredItems.length,
@@ -116,7 +103,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
         style: Theme.of(context).textTheme.labelMedium,
       ),
       subtitle: Text(
-        _filteredItems[index].complaintDate.toString().substring(0, 10),
+        _filteredItems[index]
+            .complaintDate
+            .toDate()
+            .toString()
+            .substring(0, 10),
         style: TextStyle(
           color: Theme.of(context).colorScheme.onPrimary,
         ),

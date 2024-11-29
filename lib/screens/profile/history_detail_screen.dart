@@ -18,9 +18,11 @@ class HistoryDetailScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: _allDetails(context),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: _allDetails(context),
+          ),
         ),
       ),
     );
@@ -37,13 +39,22 @@ class HistoryDetailScreen extends StatelessWidget {
         height: 8,
       ),
       _details(context),
+      const SizedBox(
+        height: 8,
+      ),
       Text(
         complainModel.description,
         style: Theme.of(context).textTheme.displayMedium,
       ),
+      const SizedBox(
+        height: 8,
+      ),
       Text(
         "Address: ${complainModel.address}",
         style: Theme.of(context).textTheme.displayMedium,
+      ),
+      const SizedBox(
+        height: 8,
       ),
       Text(
         "Landmark: ${complainModel.address}",
@@ -66,7 +77,7 @@ class HistoryDetailScreen extends StatelessWidget {
           style: Theme.of(context).textTheme.displayLarge,
         ),
         Text(
-          complainModel.complaintDate.toString().substring(0, 10),
+          complainModel.complaintDate.toDate().toString().substring(0, 10),
           style: Theme.of(context).textTheme.displayMedium,
         ),
       ],
@@ -94,6 +105,7 @@ class HistoryDetailScreen extends StatelessWidget {
   SizedBox _userImage() {
     return SizedBox(
       height: 300,
+      width: double.infinity,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: Image.network(

@@ -7,11 +7,9 @@ class LocationController extends GetxController {
 
   String _address = "";
 
-  @override
-  void onInit() async {
+  void requestPermission() async {
     debugPrint("Requesting Location Permission");
     await _geolocatorRepo.requestPermission();
-    super.onInit();
   }
 
   void requestAddress() async {

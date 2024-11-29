@@ -5,12 +5,12 @@ class ComplainModel {
   final String title;
   final String description;
   final String category;
-  final DateTime complaintDate;
+  final Timestamp complaintDate;
   final String address;
   final String? landMark;
   final String imageUrl;
   final int status;
-  final DateTime? resolvedDate;
+  final Timestamp? resolvedDate;
   final String userId;
   final DocumentReference? adminId;
 
@@ -34,14 +34,34 @@ class ComplainModel {
       'title': title,
       'description': description,
       'category': category,
-      'complaintDate': complaintDate.toIso8601String(),
+      'complaintDate': complaintDate,
       'address': address,
       'landMark': landMark,
       'imageUrl': imageUrl,
       'status': status,
-      'resolvedDate': resolvedDate?.toIso8601String(),
+      'resolvedDate': resolvedDate,
       'userId': userId,
       'adminId': adminId,
     };
+  }
+
+  // Factory method to create an instance from a map
+  factory ComplainModel.fromMap(Map<String, dynamic> map, String? documentId) {
+    return ComplainModel(
+      id: documentId,
+      title: map['title'] ?? '',
+      description: map['description'] ?? '',
+      category: map['category'] ?? '',
+      complaintDate: (map['complaintDate'] as Timestamp),
+      address: map['address'] ?? '',
+      landMark: map['landMark'],
+      imageUrl: map['imageUrl'] ?? '',
+      status: map['status'] ?? 0,
+      resolvedDate: map['resolvedDate'] != null
+          ? (map['resolvedDate'] as Timestamp)
+          : null,
+      userId: map['userId'] ?? '',
+      adminId: map['adminId'],
+    );
   }
 }

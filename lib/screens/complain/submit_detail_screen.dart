@@ -5,6 +5,7 @@ import 'package:civic_voice/components/controller/db_controller.dart';
 import 'package:civic_voice/components/controller/location_controller.dart';
 import 'package:civic_voice/components/models/complain_model.dart';
 import 'package:civic_voice/screens/complain/confirmation_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -146,16 +147,22 @@ class _SubmitDetailScreenState extends State<SubmitDetailScreen> {
     );
   }
 
-  void _onSubmit() {
+  void _onSubmit() async {
     if (_formKey.currentState!.validate()) {
+      // String? url = await _dbController.uploadImage(File(widget.image.path));
+
+      // if (url == null) {
+      //   return;
+      // }
+
       ComplainModel complainModel = ComplainModel(
         title: titleController.value.text,
         description: descriptionController.value.text,
         category: category!,
-        complaintDate: DateTime.now(),
+        complaintDate: Timestamp.fromDate(DateTime.now()),
         address: addressController.value.text,
         landMark: landmarkController.value.text,
-        imageUrl: category!,
+        imageUrl: "https://picsum.photos/200/300",
         userId: FirebaseAuth.instance.currentUser!.uid,
       );
 
@@ -181,7 +188,6 @@ class _SubmitDetailScreenState extends State<SubmitDetailScreen> {
           maxLines: maxLines,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           cursorColor: Theme.of(context).colorScheme.primary,
-          keyboardType: const TextInputType.numberWithOptions(),
           decoration: InputDecoration(
             // labelText: "$text*",
             counterText: "",

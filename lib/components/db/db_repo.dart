@@ -6,7 +6,11 @@ class DbRepo {
 
   void store(Map<String, dynamic> data, String collection,
       {String? uid}) async {
-    await db.collection(collection).doc(uid).set(data);
+    if (uid != null) {
+      await db.collection(collection).doc(uid).set(data);
+    } else {
+      await db.collection(collection).doc().set(data);
+    }
   }
 
   void storeIfNeccessary(
@@ -20,6 +24,35 @@ class DbRepo {
     } else {
       debugPrint("New User!");
       store(data, collections, uid: uid);
+    }
+  }
+
+  Future<Map<String, dynamic>> getHistory(
+      String collection, String userId) async {
+    try {
+      // Fetching the complaints from Firestore based on userId
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection(collection)
+          .where('userId', isEqualTo: userId)
+          .orderBy('complaintDate',
+              descending: true) // Assuming you want to order by the date
+          .get();
+
+      // If no documents found, return an empty map
+      if (snapshot.docs.isEmpty) {
+        return {'status': 'No history found', 'data': []};
+      }
+
+      // Extracting the data from the documents
+      List<Map<String, dynamic>> historyList = snapshot.docs.map((doc) {
+        return doc.data() as Map<String, dynamic>;
+      }).toList();
+
+      // Returning the history
+      return {'status': 'Success', 'data': historyList};
+    } catch (e) {
+      debugPrint("Error fetching history: $e");
+      return {'status': 'Error', 'data': []};
     }
   }
 }
