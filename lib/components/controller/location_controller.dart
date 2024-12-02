@@ -1,4 +1,4 @@
-import 'package:civic_voice/components/geolocator/geolocator_repo.dart';
+import 'package:civic_voice/components/utils/geolocator/geolocator_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

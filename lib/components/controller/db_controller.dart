@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:civic_voice/components/db/db_repo.dart';
 import 'package:civic_voice/components/models/complain_model.dart';
+import 'package:civic_voice/components/models/query_model.dart';
 import 'package:civic_voice/components/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -31,13 +32,18 @@ class DBController extends GetxController {
     _user = UserModel.fromMap(mp['data'], uid);
   }
 
-  void updateUser(UserModel user) {
+  void updateUser(UserModel user) async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
-    _db.updateUser(user.toMap(), "users", uid);
+    await _db.updateUser(user.toMap(), "users", uid);
+    getUser();
   }
 
   void storeComplain(ComplainModel complain) {
     _db.store(complain.toMap(), "complains");
+  }
+
+  Future<void> storeQuery(QueryModel query) async {
+    await _db.store(query.toMap(), "query");
   }
 
   Future<List<ComplainModel>> getHistory() async {

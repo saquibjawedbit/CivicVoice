@@ -1,6 +1,8 @@
-import 'package:civic_voice/components/buttons/primary_blue_button.dart';
+import 'package:civic_voice/components/utils/buttons/primary_blue_button.dart';
 import 'package:civic_voice/components/models/complain_model.dart';
 import 'package:flutter/material.dart';
+import 'package:civic_voice/screens/contact-us/contact_us.dart';
+import 'package:get/get.dart';
 
 class HistoryDetailScreen extends StatelessWidget {
   const HistoryDetailScreen({super.key, required this.complainModel});
@@ -32,55 +34,63 @@ class HistoryDetailScreen extends StatelessWidget {
     return [
       _userImage(),
       const SizedBox(
-        height: 8,
+        height: 16,
       ),
       _status(context),
       const SizedBox(
-        height: 8,
+        height: 32,
       ),
       _details(context),
       const SizedBox(
-        height: 8,
+        height: 16,
       ),
       Text(
-        complainModel.description,
+        "Created At: ${complainModel.complaintDate.toDate().toString().substring(0, 10)}",
         style: Theme.of(context).textTheme.displayMedium,
       ),
       const SizedBox(
         height: 8,
+      ),
+      Text(
+        "Description: ${complainModel.description}",
+        style: Theme.of(context).textTheme.displayMedium,
+      ),
+      const SizedBox(
+        height: 16,
       ),
       Text(
         "Address: ${complainModel.address}",
         style: Theme.of(context).textTheme.displayMedium,
       ),
       const SizedBox(
-        height: 8,
+        height: 16,
       ),
       Text(
         "Landmark: ${complainModel.address}",
         style: Theme.of(context).textTheme.displayMedium,
       ),
       const SizedBox(
-        height: 16,
+        height: 32,
       ),
       PrimaryBlueButton(
-          text: "Contact Us", textColor: Colors.white, onTap: () {}),
+          text: "Contact Us",
+          textColor: Colors.white,
+          onTap: () {
+            Get.to(
+              () => ContactUs(),
+              transition: Transition.leftToRightWithFade,
+            );
+          }),
+      const SizedBox(
+        height: 32,
+      ),
     ];
   }
 
-  Row _details(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          complainModel.title,
-          style: Theme.of(context).textTheme.displayLarge,
-        ),
-        Text(
-          complainModel.complaintDate.toDate().toString().substring(0, 10),
-          style: Theme.of(context).textTheme.displayMedium,
-        ),
-      ],
+  Widget _details(BuildContext context) {
+    return Text(
+      complainModel.title,
+      style: Theme.of(context).textTheme.displayLarge,
     );
   }
 

@@ -1,10 +1,20 @@
 import 'package:civic_voice/components/auth/authentication_repo.dart';
+import 'package:civic_voice/components/utils/permission-handler/parmission_handler.dart';
 import 'package:get/get.dart';
 
 class AuthenticationController extends GetxController {
   final AuthenticationRepo _auth = AuthenticationRepo();
 
-  Future<void> sendOTP(String phoneNumber) async {
+  @override
+  void onInit() {
+    PermissionHandler.requestPermission();
+    super.onInit();
+  }
+
+  var isLoading = false.obs;
+
+  void sendOTP(String phoneNumber) async {
+    isLoading.value = true;
     await _auth.sendOTP(phoneNumber);
   }
 

@@ -17,7 +17,6 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
   Timer? _timer;
 
   final AuthenticationController _authenticationController = Get.find();
-
   bool _isLoading = false;
 
   @override

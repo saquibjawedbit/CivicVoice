@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 class DbRepo {
   final db = FirebaseFirestore.instance;
 
-  void store(Map<String, dynamic> data, String collection,
+  Future<void> store(Map<String, dynamic> data, String collection,
       {String? uid}) async {
     if (uid != null) {
       await db.collection(collection).doc(uid).set(data);
@@ -13,8 +13,9 @@ class DbRepo {
     }
   }
 
-  void updateUser(Map<String, dynamic> data, String collection, String uid) {
-    db.collection(collection).doc(uid).set(data, SetOptions(merge: true));
+  Future<void> updateUser(
+      Map<String, dynamic> data, String collection, String uid) async {
+    await db.collection(collection).doc(uid).set(data, SetOptions(merge: true));
   }
 
   Future<Map<String, dynamic>> getData(String collection, String uid) async {

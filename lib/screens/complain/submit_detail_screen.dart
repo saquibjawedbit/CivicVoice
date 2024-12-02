@@ -1,5 +1,5 @@
 import 'package:camera/camera.dart';
-import 'package:civic_voice/components/buttons/primary_blue_button.dart';
+import 'package:civic_voice/components/utils/buttons/primary_blue_button.dart';
 import 'package:civic_voice/components/constants/category_complaint.dart';
 import 'package:civic_voice/components/controller/db_controller.dart';
 import 'package:civic_voice/components/controller/location_controller.dart';

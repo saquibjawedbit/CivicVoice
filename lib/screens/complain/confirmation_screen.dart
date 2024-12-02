@@ -1,4 +1,4 @@
-import 'package:civic_voice/components/buttons/primary_blue_button.dart';
+import 'package:civic_voice/components/utils/buttons/primary_blue_button.dart';
 import 'package:civic_voice/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

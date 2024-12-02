@@ -1,24 +1,17 @@
-import 'package:civic_voice/components/buttons/primary_blue_button.dart';
+import 'package:civic_voice/components/utils/buttons/primary_blue_button.dart';
 import 'package:civic_voice/components/controller/authentication_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  LoginScreen({super.key});
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
   final AuthenticationController controller =
       Get.put(AuthenticationController());
 
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController phoneNumberController = TextEditingController();
-
-  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +37,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
-              if (_isLoading)
-                const Align(
-                  alignment: Alignment.center,
-                  child: CircularProgressIndicator(),
-                ),
+              Obx(() {
+                if (controller.isLoading.value == true) {
+                  return const Align(
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                return const SizedBox();
+              })
             ],
           ),
         ),
@@ -96,14 +94,8 @@ class _LoginScreenState extends State<LoginScreen> {
             onTap: () async {
               //SENDS OTP
               if (_formKey.currentState!.validate()) {
-                setState(() {
-                  _isLoading = true;
-                });
-                await controller
+                controller
                     .sendOTP("+91${phoneNumberController.text.toLowerCase()}");
-                setState(() {
-                  _isLoading = false;
-                });
               }
             },
           ),

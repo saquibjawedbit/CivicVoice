@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:civic_voice/components/buttons/primary_blue_button.dart';
+import 'package:civic_voice/components/utils/buttons/primary_blue_button.dart';
 import 'package:civic_voice/components/controller/db_controller.dart';
 import 'package:civic_voice/components/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';

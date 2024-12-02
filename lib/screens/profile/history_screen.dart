@@ -99,7 +99,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return ListTile(
       title: Text(
         _filteredItems[index].title,
-        style: Theme.of(context).textTheme.labelMedium,
+        style: Theme.of(context).textTheme.labelMedium!.copyWith(
+              overflow: TextOverflow.clip,
+            ),
       ),
       subtitle: Text(
         _filteredItems[index]

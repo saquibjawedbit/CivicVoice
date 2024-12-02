@@ -1,5 +1,5 @@
 import 'package:camera/camera.dart';
-import 'package:civic_voice/components/buttons/primary_blue_button.dart';
+import 'package:civic_voice/components/utils/buttons/primary_blue_button.dart';
 import 'package:civic_voice/components/view/image_view.dart';
 import 'package:civic_voice/screens/complain/submit_detail_screen.dart';
 import 'package:flutter/material.dart';

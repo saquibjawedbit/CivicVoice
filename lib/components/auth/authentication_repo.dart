@@ -1,3 +1,4 @@
+import 'package:civic_voice/components/controller/authentication_controller.dart';
 import 'package:civic_voice/components/controller/db_controller.dart';
 import 'package:civic_voice/components/models/user_model.dart';
 import 'package:civic_voice/screens/authentication/otp_verify_screen.dart';
@@ -13,11 +14,13 @@ class AuthenticationRepo {
   late String phoneNumber;
 
   Future<void> sendOTP(String phoneNumber) async {
+    final AuthenticationController authenticationController = Get.find();
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       timeout: const Duration(seconds: 60),
       verificationCompleted: (PhoneAuthCredential credential) async {
         await auth.signInWithCredential(credential);
+        authenticationController.isLoading.value = false;
       },
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {
@@ -26,6 +29,7 @@ class AuthenticationRepo {
         } else {
           Get.snackbar("Error!", e.code);
         }
+        authenticationController.isLoading.value = false;
       },
       codeSent: (String verificationId, int? resendToken) async {
         // Update the UI - wait for the user to enter the SMS code
@@ -33,8 +37,11 @@ class AuthenticationRepo {
         this.verificationId = verificationId;
         this.phoneNumber = phoneNumber;
         Get.to(() => const OtpVerifyScreen());
+        authenticationController.isLoading.value = false;
       },
-      codeAutoRetrievalTimeout: (String verificationId) {},
+      codeAutoRetrievalTimeout: (String verificationId) {
+        authenticationController.isLoading.value = false;
+      },
     );
   }
 
