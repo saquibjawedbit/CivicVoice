@@ -118,13 +118,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
         decoration: BoxDecoration(
           color: _filteredItems[index].status == 0
               ? const Color.fromARGB(255, 234, 211, 4)
-              : (_filteredItems[index].status == 1 ? Colors.green : Colors.red),
+              : (_filteredItems[index].status == 2 ? Colors.green : Colors.red),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Text(
           _filteredItems[index].status == 0
               ? "Working on it !"
-              : (_filteredItems[index].status == 1
+              : (_filteredItems[index].status == 2
                   ? "Resolved"
                   : "Not Resolved"),
           style: const TextStyle(

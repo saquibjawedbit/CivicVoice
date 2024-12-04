@@ -50,7 +50,7 @@ class _UserInfoState extends State<UserInfo> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Phone Number: ${_userModel!.id ?? "Error loading"}",
+                            "UID: ${_userModel!.id ?? "Error loading"}",
                             style: Theme.of(context).textTheme.displayLarge,
                           ),
                           const SizedBox(

@@ -105,7 +105,7 @@ class HistoryDetailScreen extends StatelessWidget {
         Text(
           (complainModel.status == 0)
               ? "Working on it !"
-              : (complainModel.status == 1 ? "Resolved" : "Not Resolved"),
+              : (complainModel.status == 2 ? "Resolved" : "Not Resolved"),
           style: Theme.of(context).textTheme.displayLarge,
         ),
       ],

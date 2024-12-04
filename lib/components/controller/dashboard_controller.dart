@@ -24,6 +24,10 @@ class DashboardController extends GetxController {
     });
   }
 
+  Future<void> updateStatus(int status, String uid) async {
+    await _dbDashBoardRepo.updateStatus(status, uid);
+  }
+
   void getCount(LatLngBounds bounds) async {
     final pending = await _dbDashBoardRepo.getTotalCount(bounds, 0);
     final working = await _dbDashBoardRepo.getTotalCount(bounds, 1);
@@ -45,5 +49,10 @@ class DashboardController extends GetxController {
   Future<UserModel> fetchUser(String uid) async {
     final user = await _dbDashBoardRepo.fetchUser(uid);
     return user;
+  }
+
+  Future<ComplainModel> fetchComplain(String uid) async {
+    final complain = await _dbDashBoardRepo.fetchComplain(uid);
+    return complain;
   }
 }

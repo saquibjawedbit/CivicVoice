@@ -51,4 +51,17 @@ class DbDashBoardRepo {
     UserModel user = UserModel.fromMap(ref.data()!, ref.id);
     return user;
   }
+
+  Future<ComplainModel> fetchComplain(String uid) async {
+    final ref = await _db.collection("complains").doc(uid).get();
+    ComplainModel complain = ComplainModel.fromMap(ref.data()!, ref.id);
+    return complain;
+  }
+
+  Future<void> updateStatus(int status, String uid) async {
+    final data = {
+      "status": status,
+    };
+    await _db.collection("complains").doc(uid).update(data);
+  }
 }
