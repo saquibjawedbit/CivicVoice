@@ -1,6 +1,7 @@
 import 'package:civic_voice/components/controller/dashboard_controller.dart';
-import 'package:civic_voice/dashboard/map_widget.dart';
-import 'package:civic_voice/dashboard/table_widget.dart';
+import 'package:civic_voice/dashboard/components/utils/map_widget.dart';
+import 'package:civic_voice/dashboard/components/utils/side_bar.dart';
+import 'package:civic_voice/dashboard/components/utils/table_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
@@ -13,16 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedOption = 0;
-
   final DashboardController _controller = Get.put(DashboardController());
-
-  final List<Map<String, dynamic>> sidebarOptions = [
-    {'icon': Icons.home, 'label': 'Home'},
-    {'icon': Icons.account_circle_rounded, 'label': 'User Info'},
-    {'icon': Icons.settings, 'label': 'Settings'},
-    {'icon': Icons.notifications, 'label': 'Notifications'},
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -30,17 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Row(
         children: [
           // Sidebar
-          Container(
-            width: 240,
-            color: Theme.of(context).colorScheme.primary,
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                for (int i = 0; i < sidebarOptions.length; i++)
-                  _sideBarButtons(i, context),
-              ],
-            ),
-          ),
+          const SideBar(),
           // Main Content
           Expanded(
             child: Column(
@@ -63,31 +45,33 @@ class _HomeScreenState extends State<HomeScreen> {
                                 "Summary",
                                 style: Theme.of(context).textTheme.displayLarge,
                               ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: _pieChart(
-                                      30,
-                                      Colors.red,
-                                      "Issue Pending",
+                              Obx(() {
+                                return Row(
+                                  children: [
+                                    Expanded(
+                                      child: _pieChart(
+                                        _controller.pending.value,
+                                        Colors.red,
+                                        "Issue Pending",
+                                      ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: _pieChart(
-                                      60,
-                                      Colors.yellow,
-                                      "Issue Working on",
+                                    Expanded(
+                                      child: _pieChart(
+                                        _controller.working.value,
+                                        Colors.yellow,
+                                        "Issue Working on",
+                                      ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: _pieChart(
-                                      90,
-                                      Colors.green,
-                                      "Issue Resolved",
+                                    Expanded(
+                                      child: _pieChart(
+                                        _controller.resolved.value,
+                                        Colors.green,
+                                        "Issue Resolved",
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
+                                  ],
+                                );
+                              }),
                             ],
                           ),
                         ),
@@ -141,33 +125,6 @@ class _HomeScreenState extends State<HomeScreen> {
           style: Theme.of(context).textTheme.labelMedium,
         ),
       ],
-    );
-  }
-
-  GestureDetector _sideBarButtons(int i, BuildContext context) {
-    return GestureDetector(
-      onTap: () => setState(() => _selectedOption = i),
-      child: Container(
-        color: _selectedOption == i
-            ? Theme.of(context).colorScheme.secondary.withOpacity(0.2)
-            : Colors.transparent,
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          children: [
-            Icon(
-              sidebarOptions[i]['icon'],
-              color: Colors.white,
-            ),
-            const SizedBox(
-              width: 2,
-            ),
-            Text(
-              sidebarOptions[i]['label'],
-              style: const TextStyle(color: Colors.white, fontSize: 12),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
