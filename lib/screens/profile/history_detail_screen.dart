@@ -66,7 +66,7 @@ class HistoryDetailScreen extends StatelessWidget {
         height: 16,
       ),
       Text(
-        "Landmark: ${complainModel.address}",
+        "Landmark: ${complainModel.landMark}",
         style: Theme.of(context).textTheme.displayMedium,
       ),
       const SizedBox(

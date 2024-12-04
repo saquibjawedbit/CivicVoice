@@ -27,9 +27,11 @@ class DBController extends GetxController {
   }
 
   Future<void> getUser() async {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    Map<String, dynamic> mp = await _db.getData("users", uid);
-    _user = UserModel.fromMap(mp['data'], uid);
+    if (FirebaseAuth.instance.currentUser != null) {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      Map<String, dynamic> mp = await _db.getData("users", uid);
+      _user = UserModel.fromMap(mp['data'], uid);
+    }
   }
 
   void updateUser(UserModel user) async {

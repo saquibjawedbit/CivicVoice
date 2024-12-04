@@ -46,7 +46,7 @@ class GeolocatorRepo {
     return true;
   }
 
-  Future<Position> _determineLocation() async {
+  Future<Position> determineLocation() async {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     bool permission = await requestPermission();
@@ -59,8 +59,7 @@ class GeolocatorRepo {
     return position;
   }
 
-  Future<String> getAddress() async {
-    Position position = await _determineLocation();
+  Future<String> getAddress(Position position) async {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
     Map<String, dynamic> addressFields = placemarks[0].toJson();

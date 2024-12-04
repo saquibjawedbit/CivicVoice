@@ -1,8 +1,8 @@
 import 'package:civic_voice/components/constants/colors.dart';
 import 'package:civic_voice/components/controller/db_controller.dart';
-import 'package:civic_voice/screens/authentication/sign_up_screen.dart';
-import 'package:civic_voice/screens/home_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:civic_voice/dashboard/home_sceen.dart';
+import 'package:civic_voice/screens/app.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,15 +26,10 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Civic Voice',
       theme: _theme(context),
-      home: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.userChanges(),
-          builder: (context, snapshot) {
-            debugPrint("Rebuilding");
-            if (!snapshot.hasData) {
-              return const SignUpScreen();
-            }
-            return const HomeScreen();
-          }),
+      home: Builder(builder: (context) {
+        if (kIsWeb) return const HomeScreen();
+        return const App();
+      }),
     );
   }
 

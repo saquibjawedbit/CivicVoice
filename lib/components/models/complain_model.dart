@@ -9,6 +9,8 @@ class ComplainModel {
   final String address;
   final String? landMark;
   final String imageUrl;
+  final double latitude;
+  final double longitude;
   final int status;
   final Timestamp? resolvedDate;
   final String userId;
@@ -24,6 +26,8 @@ class ComplainModel {
     this.landMark,
     required this.imageUrl,
     required this.userId,
+    required this.latitude,
+    required this.longitude,
     this.adminId,
     this.resolvedDate,
     this.status = 0,
@@ -37,6 +41,8 @@ class ComplainModel {
       'complaintDate': complaintDate,
       'address': address,
       'landMark': landMark,
+      'latitude': latitude,
+      'longitude': longitude,
       'imageUrl': imageUrl,
       'status': status,
       'resolvedDate': resolvedDate,
@@ -62,6 +68,8 @@ class ComplainModel {
           : null,
       userId: map['userId'] ?? '',
       adminId: map['adminId'],
+      latitude: map['latitude'],
+      longitude: map['longitude'],
     );
   }
 }

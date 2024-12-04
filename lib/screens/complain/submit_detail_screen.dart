@@ -154,7 +154,8 @@ class _SubmitDetailScreenState extends State<SubmitDetailScreen> {
       // if (url == null) {
       //   return;
       // }
-
+      double lats = _locationController.lats;
+      double longs = _locationController.longs;
       ComplainModel complainModel = ComplainModel(
         title: titleController.value.text,
         description: descriptionController.value.text,
@@ -164,6 +165,8 @@ class _SubmitDetailScreenState extends State<SubmitDetailScreen> {
         landMark: landmarkController.value.text,
         imageUrl: "https://picsum.photos/200/300",
         userId: FirebaseAuth.instance.currentUser!.uid,
+        latitude: lats,
+        longitude: longs,
       );
 
       _dbController.storeComplain(complainModel);
