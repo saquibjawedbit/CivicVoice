@@ -61,18 +61,13 @@ class ComplainModel {
         .toList();
   }
 
-  static String processAddressToString(String address) {
-    return address
-        .toLowerCase() // Convert to lowercase
-        .replaceAll(RegExp(r'[^\w\s]'), '') // Remove punctuation
-        .split(' ') // Split into words
-        .where((word) => word.isNotEmpty) // Remove empty strings
-        .join(' '); // Join back into a single string
+  static String convertTokensToAddress(List<dynamic> tokens) {
+    return tokens.where((word) => word.isNotEmpty).join(' ');
   }
 
   // Factory method to create an instance from a map
   factory ComplainModel.fromMap(Map<String, dynamic> map, String? documentId) {
-    String add = processAddressToString(map['address']);
+    String add = convertTokensToAddress(map['address']);
     return ComplainModel(
       id: documentId,
       title: map['title'] ?? '',

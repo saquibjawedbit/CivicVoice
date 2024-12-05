@@ -52,10 +52,15 @@ class DbDashBoardRepo {
     return user;
   }
 
-  Future<ComplainModel> fetchComplain(String uid) async {
+  Future<ComplainModel?> fetchComplain(String uid) async {
     final ref = await _db.collection("complains").doc(uid).get();
-    ComplainModel complain = ComplainModel.fromMap(ref.data()!, ref.id);
-    return complain;
+    try {
+      ComplainModel complain = ComplainModel.fromMap(ref.data()!, ref.id);
+      return complain;
+    } catch (e) {
+      debugPrint(e.toString());
+      return null;
+    }
   }
 
   Future<void> updateStatus(int status, String uid) async {
@@ -65,22 +70,54 @@ class DbDashBoardRepo {
     await _db.collection("complains").doc(uid).update(data);
   }
 
-  Future<List<ComplainModel>> fetchAllComplains(String city) async {
+  Future<List<ComplainModel>?> fetchAllComplains(
+      String? city, String? category) async {
     try {
-      // Query Firestore collection with 'arrayContains' for the city keyword
-      QuerySnapshot querySnapshot = await _db
-          .collection('complains')
-          .where('address', arrayContains: city)
-          .get();
+      List<ComplainModel> complaints;
 
-      // Map query results to a list of ComplainModel objects
-      List<ComplainModel> complaints = querySnapshot.docs.map((doc) {
-        return ComplainModel.fromMap(
-            doc.data() as Map<String, dynamic>, doc.id);
-      }).toList();
+      if ((category == null || category.isEmpty) &&
+          (city != null && city.isNotEmpty)) {
+        // Query Firestore collection with 'arrayContains' for the city keyword
+
+        QuerySnapshot querySnapshot = await _db
+            .collection('complains')
+            .where('address', arrayContains: city)
+            .get();
+
+        // Map query results to a list of ComplainModel objects
+        complaints = querySnapshot.docs.map((doc) {
+          return ComplainModel.fromMap(
+              doc.data() as Map<String, dynamic>, doc.id);
+        }).toList();
+      } else if ((category != null && category.isNotEmpty) &&
+          (city == null || city.isEmpty)) {
+        QuerySnapshot querySnapshot = await _db
+            .collection('complains')
+            .where('category', isEqualTo: category)
+            .get();
+
+        // Map query results to a list of ComplainModel objects
+        complaints = querySnapshot.docs.map((doc) {
+          return ComplainModel.fromMap(
+              doc.data() as Map<String, dynamic>, doc.id);
+        }).toList();
+      } else {
+        QuerySnapshot querySnapshot = await _db
+            .collection('complains')
+            .where('address', arrayContains: city)
+            .where('category', isEqualTo: category)
+            .get();
+
+        // Map query results to a list of ComplainModel objects
+        complaints = querySnapshot.docs.map((doc) {
+          return ComplainModel.fromMap(
+              doc.data() as Map<String, dynamic>, doc.id);
+        }).toList();
+      }
 
       return complaints;
     } catch (e) {
+      debugPrint(e.toString());
       return [];
     }
   }

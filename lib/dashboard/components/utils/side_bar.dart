@@ -1,29 +1,23 @@
+import 'package:civic_voice/dashboard/components/constants/sidebar_constant.dart';
+import 'package:civic_voice/dashboard/components/pages/all_user_info.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class SideBar extends StatefulWidget {
+class SideBar extends StatelessWidget {
   const SideBar({
     super.key,
+    required this.selectedOption,
   });
 
-  @override
-  State<SideBar> createState() => _SideBarState();
-}
-
-class _SideBarState extends State<SideBar> {
-  int _selectedOption = 0;
-
-  final List<Map<String, dynamic>> sidebarOptions = [
-    {'icon': Icons.home, 'label': 'Home'},
-    {'icon': Icons.account_circle_rounded, 'label': 'User Info'},
-    {'icon': Icons.settings, 'label': 'Settings'},
-    {'icon': Icons.notifications, 'label': 'Notifications'},
-  ];
+  final int selectedOption;
 
   GestureDetector _sideBarButtons(int i, BuildContext context) {
     return GestureDetector(
-      onTap: () => setState(() => _selectedOption = i),
+      onTap: () {
+        Get.to(() => const AllUserInfo());
+      },
       child: Container(
-        color: _selectedOption == i
+        color: selectedOption == i
             ? Theme.of(context).colorScheme.secondary.withOpacity(0.2)
             : Colors.transparent,
         padding: const EdgeInsets.all(10),
@@ -55,7 +49,10 @@ class _SideBarState extends State<SideBar> {
         children: [
           const SizedBox(height: 20),
           for (int i = 0; i < sidebarOptions.length; i++)
-            _sideBarButtons(i, context),
+            _sideBarButtons(
+              i,
+              context,
+            ),
         ],
       ),
     );

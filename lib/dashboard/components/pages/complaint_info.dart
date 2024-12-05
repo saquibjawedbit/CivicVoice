@@ -35,7 +35,9 @@ class _ComplaintInfoState extends State<ComplaintInfo> {
     return Scaffold(
       body: Row(
         children: [
-          const SideBar(),
+          const SideBar(
+            selectedOption: 0,
+          ),
           (_complainModel == null)
               ? const Center(child: CircularProgressIndicator())
               : Padding(

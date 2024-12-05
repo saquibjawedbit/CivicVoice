@@ -32,7 +32,9 @@ class _UserInfoState extends State<UserInfo> {
     return Scaffold(
       body: Row(
         children: [
-          const SideBar(),
+          const SideBar(
+            selectedOption: 0,
+          ),
           (_userModel == null)
               ? const Center(child: CircularProgressIndicator())
               : Padding(
@@ -40,7 +42,7 @@ class _UserInfoState extends State<UserInfo> {
                   child: Column(
                     children: [
                       Text(
-                        "User Information",
+                        "All Complaints",
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(

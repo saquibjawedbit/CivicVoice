@@ -22,7 +22,9 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Row(
         children: [
           // Sidebar
-          const SideBar(),
+          const SideBar(
+            selectedOption: 0,
+          ),
           // Main Content
           Expanded(
             child: Column(
