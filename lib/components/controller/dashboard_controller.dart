@@ -40,10 +40,6 @@ class DashboardController extends GetxController {
     resolved.value = (accepted / total) * 100;
     this.pending.value = (pending / total) * 100;
     this.working.value = (working / total) * 100;
-
-    // resolved.value = 20.5;
-    // this.pending.value = 18.5;
-    // this.working.value = 2;
   }
 
   Future<UserModel> fetchUser(String uid) async {
@@ -54,5 +50,10 @@ class DashboardController extends GetxController {
   Future<ComplainModel> fetchComplain(String uid) async {
     final complain = await _dbDashBoardRepo.fetchComplain(uid);
     return complain;
+  }
+
+  Future<List<ComplainModel>> fetchAllComplainModel(String city) async {
+    final data = await _dbDashBoardRepo.fetchAllComplains(city);
+    return data;
   }
 }

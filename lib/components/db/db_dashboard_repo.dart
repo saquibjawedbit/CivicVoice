@@ -64,4 +64,24 @@ class DbDashBoardRepo {
     };
     await _db.collection("complains").doc(uid).update(data);
   }
+
+  Future<List<ComplainModel>> fetchAllComplains(String city) async {
+    try {
+      // Query Firestore collection with 'arrayContains' for the city keyword
+      QuerySnapshot querySnapshot = await _db
+          .collection('complains')
+          .where('address', arrayContains: city)
+          .get();
+
+      // Map query results to a list of ComplainModel objects
+      List<ComplainModel> complaints = querySnapshot.docs.map((doc) {
+        return ComplainModel.fromMap(
+            doc.data() as Map<String, dynamic>, doc.id);
+      }).toList();
+
+      return complaints;
+    } catch (e) {
+      return [];
+    }
+  }
 }

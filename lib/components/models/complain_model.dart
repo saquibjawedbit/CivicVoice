@@ -39,7 +39,7 @@ class ComplainModel {
       'description': description,
       'category': category,
       'complaintDate': complaintDate,
-      'address': address,
+      'address': processAddress(address),
       'landMark': landMark,
       'latitude': latitude,
       'longitude': longitude,
@@ -51,15 +51,35 @@ class ComplainModel {
     };
   }
 
+  static List<String> processAddress(String address) {
+    // Use RegExp to remove punctuation and split by spaces
+    return address
+        .toLowerCase() // Convert to lowercase
+        .replaceAll(RegExp(r'[^\w\s]'), '') // Remove punctuation
+        .split(' ') // Split by spaces
+        .where((word) => word.isNotEmpty) // Remove empty strings
+        .toList();
+  }
+
+  static String processAddressToString(String address) {
+    return address
+        .toLowerCase() // Convert to lowercase
+        .replaceAll(RegExp(r'[^\w\s]'), '') // Remove punctuation
+        .split(' ') // Split into words
+        .where((word) => word.isNotEmpty) // Remove empty strings
+        .join(' '); // Join back into a single string
+  }
+
   // Factory method to create an instance from a map
   factory ComplainModel.fromMap(Map<String, dynamic> map, String? documentId) {
+    String add = processAddressToString(map['address']);
     return ComplainModel(
       id: documentId,
       title: map['title'] ?? '',
       description: map['description'] ?? '',
       category: map['category'] ?? '',
       complaintDate: (map['complaintDate'] as Timestamp),
-      address: map['address'] ?? '',
+      address: add,
       landMark: map['landMark'],
       imageUrl: map['imageUrl'] ?? '',
       status: map['status'] ?? 0,
