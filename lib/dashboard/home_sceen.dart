@@ -2,6 +2,7 @@ import 'package:civic_voice/components/controller/dashboard_controller.dart';
 import 'package:civic_voice/dashboard/components/utils/map_widget.dart';
 import 'package:civic_voice/dashboard/components/utils/side_bar.dart';
 import 'package:civic_voice/dashboard/components/utils/table_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
@@ -18,6 +19,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (FirebaseAuth.instance.currentUser == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => Get.toNamed('/auth'));
+    }
+
     return Scaffold(
       body: Row(
         children: [

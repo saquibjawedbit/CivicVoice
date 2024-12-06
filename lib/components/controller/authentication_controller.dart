@@ -1,5 +1,6 @@
 import 'package:civic_voice/components/auth/authentication_repo.dart';
 import 'package:civic_voice/components/utils/permission-handler/parmission_handler.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class AuthenticationController extends GetxController {
@@ -7,7 +8,9 @@ class AuthenticationController extends GetxController {
 
   @override
   void onInit() {
-    PermissionHandler.requestPermission();
+    if (!kIsWeb) {
+      PermissionHandler.requestPermission();
+    }
     super.onInit();
   }
 

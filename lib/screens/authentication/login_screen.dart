@@ -59,30 +59,33 @@ class LoginScreen extends StatelessWidget {
       key: _formKey,
       child: Column(
         children: [
-          TextFormField(
-            controller: phoneNumberController,
-            cursorColor: Theme.of(context).colorScheme.primary,
-            keyboardType: const TextInputType.numberWithOptions(),
-            decoration: InputDecoration(
-              prefix: Text(
-                "+91 ",
-                style: Theme.of(context).textTheme.labelMedium,
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: TextFormField(
+              controller: phoneNumberController,
+              cursorColor: Theme.of(context).colorScheme.primary,
+              keyboardType: const TextInputType.numberWithOptions(),
+              decoration: InputDecoration(
+                prefix: Text(
+                  "+91 ",
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                labelText: "Enter your Phone Number",
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 18,
+                  horizontal: 16,
+                ),
               ),
-              labelText: "Enter your Phone Number",
-              contentPadding: const EdgeInsets.symmetric(
-                vertical: 18,
-                horizontal: 16,
-              ),
+              style: Theme.of(context).textTheme.labelMedium,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Phone Number is required';
+                } else if (value.length != 10) {
+                  return 'Phone Number should be of 10 digits';
+                }
+                return null;
+              },
             ),
-            style: Theme.of(context).textTheme.labelMedium,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Phone Number is required';
-              } else if (value.length != 10) {
-                return 'Phone Number should be of 10 digits';
-              }
-              return null;
-            },
           ),
           const SizedBox(
             height: 12,

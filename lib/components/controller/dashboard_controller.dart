@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:civic_voice/components/db/db_dashboard_repo.dart';
 import 'package:civic_voice/components/models/complain_model.dart';
 import 'package:civic_voice/components/models/user_model.dart';
@@ -14,6 +13,15 @@ class DashboardController extends GetxController {
   var resolved = 0.0.obs;
   var pending = 0.0.obs;
   var working = 0.0.obs;
+
+  UserModel? userModel;
+
+  @override
+  void onInit() {
+    // setUrlStrategy(PathUrlStrategy());
+
+    super.onInit();
+  }
 
   void listenComplainData(LatLngBounds bounds) {
     _subs?.cancel();
@@ -61,5 +69,12 @@ class DashboardController extends GetxController {
   Future<List<ComplainModel>?> fetchAllUserComplainModel(String userId) async {
     final data = await _dbDashBoardRepo.fetchAllUserComplains(userId);
     return data;
+  }
+
+  Future<bool> isAdmin(String phoneNumber) async {
+    final data = await _dbDashBoardRepo.isAdmin(phoneNumber);
+    userModel = data;
+    if (data == null) return false;
+    return true;
   }
 }

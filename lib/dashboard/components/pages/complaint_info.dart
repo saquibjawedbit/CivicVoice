@@ -2,6 +2,7 @@ import 'package:civic_voice/components/controller/dashboard_controller.dart';
 import 'package:civic_voice/components/models/complain_model.dart';
 import 'package:civic_voice/components/utils/buttons/primary_blue_button.dart';
 import 'package:civic_voice/dashboard/components/utils/side_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -38,6 +39,11 @@ class _ComplaintInfoState extends State<ComplaintInfo> {
 
   @override
   Widget build(BuildContext context) {
+    if (FirebaseAuth.instance.currentUser == null) {
+      Get.toNamed('/auth');
+      return const Placeholder();
+    }
+
     return Scaffold(
       body: Row(
         children: [

@@ -15,4 +15,5 @@ final routes = [
   GetPage(name: '/settings', page: () => const Settings()),
   GetPage(name: '/notifications', page: () => const NotificationPage()),
   GetPage(name: '/auth', page: () => LoginScreen()),
+  // GetPage(name: '/verify', page: () => const OtpVerifyScreen()),
 ];

@@ -44,7 +44,8 @@ class _UserInfoState extends State<UserInfo> {
             selectedOption: 0,
           ),
           (_userModel == null)
-              ? const Center(child: CircularProgressIndicator())
+              ? const Expanded(
+                  child: Center(child: CircularProgressIndicator()))
               : Expanded(
                   child: Padding(
                     padding:

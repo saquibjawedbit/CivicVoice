@@ -1,10 +1,11 @@
 import 'package:civic_voice/components/controller/authentication_controller.dart';
+import 'package:civic_voice/components/controller/dashboard_controller.dart';
 import 'package:civic_voice/components/controller/db_controller.dart';
 import 'package:civic_voice/components/models/user_model.dart';
 import 'package:civic_voice/screens/authentication/otp_verify_screen.dart';
 import 'package:civic_voice/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class AuthenticationRepo {
@@ -54,13 +55,25 @@ class AuthenticationRepo {
       // Sign the user in (or link) with the credential
       await auth.signInWithCredential(credential);
 
-      final DBController controller = Get.find();
-      controller.storeUser(UserModel(phoneNumber: phoneNumber));
+      if (!kIsWeb) {
+        final DBController controller = Get.find();
+        controller.storeUser(UserModel(phoneNumber: phoneNumber));
+      } else {
+        final DashboardController dashboardController = Get.find();
+        bool isAdmin = await dashboardController.isAdmin(phoneNumber);
+        if (!isAdmin) return Future.value(false);
+      }
 
-      Get.offAll(() => const HomeScreen());
+      //Routing based on whether present in dashboard or app
+      if (!kIsWeb) {
+        Get.offAll(() => const HomeScreen());
+      } else {
+        Get.offAllNamed('/');
+      }
 
       return true;
     } catch (e) {
+      debugPrint(e.toString());
       return false;
     }
   }

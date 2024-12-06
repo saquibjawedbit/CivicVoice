@@ -1,11 +1,18 @@
 import 'package:civic_voice/dashboard/components/utils/side_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class NotificationPage extends StatelessWidget {
   const NotificationPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    if (FirebaseAuth.instance.currentUser == null) {
+      Get.toNamed('/auth');
+      return const Placeholder();
+    }
+
     const String data =
         "Notifications can be send to the user through here. users of the specified/selected hotspot can be selected collectively a public health alert and all the users of that area.";
     return Scaffold(

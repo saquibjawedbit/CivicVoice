@@ -139,4 +139,26 @@ class DbDashBoardRepo {
       return [];
     }
   }
+
+  Future<UserModel?> isAdmin(String phoneNumber) async {
+    try {
+      final data = await _db
+          .collection('admin')
+          .where('phoneNumber', isEqualTo: phoneNumber)
+          .get();
+
+      final userData = data.docs
+          .map((value) => UserModel.fromMap(value.data(), value.id))
+          .toList();
+
+      if (userData.isEmpty) {
+        return null;
+      } else {
+        return userData[0];
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return null;
+    }
+  }
 }
