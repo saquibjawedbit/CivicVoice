@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final DashboardController _controller = Get.put(DashboardController());
+  final DashboardController _controller = Get.find();
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,4 @@
 import 'package:civic_voice/components/controller/dashboard_controller.dart';
-import 'package:civic_voice/dashboard/components/pages/complaint_info.dart';
-import 'package:civic_voice/dashboard/components/pages/user_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -71,16 +69,13 @@ class TableWidget extends StatelessWidget {
                           // Handle menu item selection
                           switch (value) {
                             case 'Open Problem':
-                              Get.to(
-                                () => ComplaintInfo(
-                                  complainId: controller.data[index].id!,
-                                ),
-                              );
+                              Get.toNamed('complain',
+                                  arguments: controller.data[index].id);
                               break;
                             case 'User Info':
                               // Add action for Option 2
-                              Get.to(() =>
-                                  UserInfo(uid: controller.data[index].userId));
+                              Get.toNamed('user',
+                                  arguments: controller.data[index].userId);
                               break;
                           }
                         },

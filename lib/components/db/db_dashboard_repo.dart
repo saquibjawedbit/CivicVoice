@@ -121,4 +121,22 @@ class DbDashBoardRepo {
       return [];
     }
   }
+
+  Future<List<ComplainModel>?> fetchAllUserComplains(String userId) async {
+    try {
+      List<ComplainModel> complaints;
+      final data = await _db
+          .collection("complains")
+          .where('userId', isEqualTo: userId)
+          .get();
+      // Map query results to a list of ComplainModel objects
+      complaints = data.docs.map((doc) {
+        return ComplainModel.fromMap(doc.data(), doc.id);
+      }).toList();
+      return complaints;
+    } catch (e) {
+      debugPrint(e.toString());
+      return [];
+    }
+  }
 }

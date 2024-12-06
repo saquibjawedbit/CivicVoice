@@ -57,4 +57,9 @@ class DashboardController extends GetxController {
     final data = await _dbDashBoardRepo.fetchAllComplains(city, category);
     return data;
   }
+
+  Future<List<ComplainModel>?> fetchAllUserComplainModel(String userId) async {
+    final data = await _dbDashBoardRepo.fetchAllUserComplains(userId);
+    return data;
+  }
 }

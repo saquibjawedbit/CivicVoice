@@ -6,9 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ComplaintInfo extends StatefulWidget {
-  const ComplaintInfo({super.key, required this.complainId});
+  const ComplaintInfo({super.key});
 
-  final String complainId;
   @override
   State<ComplaintInfo> createState() => _ComplaintInfoState();
 }
@@ -18,16 +17,23 @@ class _ComplaintInfoState extends State<ComplaintInfo> {
 
   final DashboardController _dashboardController = Get.find();
 
+  late String complainId;
+
   @override
-  void initState() {
+  void didChangeDependencies() {
     _loadData();
-    super.initState();
+    super.didChangeDependencies();
   }
 
   void _loadData() async {
-    _complainModel =
-        await _dashboardController.fetchComplain(widget.complainId);
-    setState(() {});
+    try {
+      final args = ModalRoute.of(context)!.settings.arguments as String;
+      _complainModel = await _dashboardController.fetchComplain(args);
+      complainId = args;
+      setState(() {});
+    }
+    // ignore: empty_catches
+    catch (e) {}
   }
 
   @override
@@ -40,97 +46,135 @@ class _ComplaintInfoState extends State<ComplaintInfo> {
           ),
           (_complainModel == null)
               ? const Center(child: CircularProgressIndicator())
-              : Padding(
-                  padding: const EdgeInsets.only(left: 36, right: 12, top: 24),
-                  child: Column(
-                    children: [
-                      Text(
-                        "User Information",
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "UID: ${_complainModel!.id ?? "Error loading"}",
-                            style: Theme.of(context).textTheme.displayLarge,
+              : Expanded(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 36, right: 12, top: 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Complaint Information",
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge!
+                              .copyWith(fontSize: 42),
+                        ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              _details(context),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              const Expanded(
+                                child: Icon(
+                                  Icons.image,
+                                  size: 600,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Text(
-                            "Title: ${_complainModel!.title}",
-                            style: Theme.of(context).textTheme.displayLarge,
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Text(
-                            "Description: ${_complainModel!.description}",
-                            style: Theme.of(context).textTheme.displayLarge,
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Text(
-                            "Category: ${_complainModel!.category}",
-                            style: Theme.of(context).textTheme.displayLarge,
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Text(
-                            "Report Date: ${_complainModel!.complaintDate.toDate()}",
-                            style: Theme.of(context).textTheme.displayLarge,
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Text(
-                            "Address: ${_complainModel!.address}",
-                            style: Theme.of(context).textTheme.displayLarge,
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Text(
-                            "landmark: ${_complainModel!.landMark}",
-                            style: Theme.of(context).textTheme.displayLarge,
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Text(
-                            "Status: ${(_complainModel!.status == 0) ? "Pending" : (_complainModel!.status == 1) ? "Working" : "Resolved"}",
-                            style: Theme.of(context).textTheme.displayLarge,
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Text(
-                            "Admin: ${_complainModel!.adminId ?? "Not Assigned"}",
-                            style: Theme.of(context).textTheme.displayLarge,
-                          ),
-                          const SizedBox(
-                            height: 36,
-                          ),
-                          PrimaryBlueButton(
-                            text: "Change Status",
-                            textColor: Colors.white,
-                            onTap: () {
-                              _showMenu(context);
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
         ],
       ),
+    );
+  }
+
+  SizedBox _details(BuildContext context) {
+    return SizedBox(
+      width: 720,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "UID: ${_complainModel!.id ?? "Error loading"}",
+            style: _textStyle(),
+          ),
+          const SizedBox(
+            height: 12,
+          ),
+          Text(
+            "Title: ${_complainModel!.title}",
+            style: _textStyle(),
+          ),
+          const SizedBox(
+            height: 12,
+          ),
+          Text(
+            "Description: ${_complainModel!.description}",
+            style: _textStyle(),
+          ),
+          const SizedBox(
+            height: 12,
+          ),
+          Text(
+            "Category: ${_complainModel!.category}",
+            style: _textStyle(),
+          ),
+          const SizedBox(
+            height: 12,
+          ),
+          Text(
+            "Report Date: ${_complainModel!.complaintDate.toDate()}",
+            style: _textStyle(),
+          ),
+          const SizedBox(
+            height: 12,
+          ),
+          Text(
+            "Address: ${_complainModel!.address}",
+            style: _textStyle(),
+          ),
+          const SizedBox(
+            height: 12,
+          ),
+          Text(
+            "landmark: ${_complainModel!.landMark}",
+            style: _textStyle(),
+          ),
+          const SizedBox(
+            height: 12,
+          ),
+          Text(
+            "Status: ${(_complainModel!.status == 0) ? "Pending" : (_complainModel!.status == 1) ? "Working" : "Resolved"}",
+            style: _textStyle(),
+          ),
+          const SizedBox(
+            height: 12,
+          ),
+          Text(
+            "Admin: ${_complainModel!.adminId ?? "Not Assigned"}",
+            style: _textStyle(),
+          ),
+          const SizedBox(
+            height: 36,
+          ),
+          PrimaryBlueButton(
+            text: "Change Status",
+            textColor: Colors.white,
+            onTap: () {
+              _showMenu(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  TextStyle _textStyle() {
+    return const TextStyle(
+      fontSize: 18,
+      color: Colors.black,
     );
   }
 
@@ -161,17 +205,17 @@ class _ComplaintInfoState extends State<ComplaintInfo> {
         switch (value) {
           case 'Completed':
             // Add logic for marking as completed
-            await _dashboardController.updateStatus(2, widget.complainId);
+            await _dashboardController.updateStatus(2, complainId);
             setState(() {});
             break;
           case 'Pending':
             // Add logic for marking as pending
-            await _dashboardController.updateStatus(1, widget.complainId);
+            await _dashboardController.updateStatus(1, complainId);
             setState(() {});
             break;
           case 'Working':
             // Add logic for marking as working
-            await _dashboardController.updateStatus(0, widget.complainId);
+            await _dashboardController.updateStatus(0, complainId);
             setState(() {});
             break;
         }

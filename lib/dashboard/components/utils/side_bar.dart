@@ -1,5 +1,4 @@
 import 'package:civic_voice/dashboard/components/constants/sidebar_constant.dart';
-import 'package:civic_voice/dashboard/components/pages/all_user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,7 +13,17 @@ class SideBar extends StatelessWidget {
   GestureDetector _sideBarButtons(int i, BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => const AllUserInfo());
+        if (i == 0) {
+          Get.toNamed('/');
+        } else if (i == 1) {
+          Get.toNamed('/complains');
+        } else if (i == 2) {
+          Get.toNamed('/settings');
+        } else if (i == 3) {
+          Get.toNamed('/notifications');
+        } else {
+          Get.offAllNamed('/');
+        }
       },
       child: Container(
         color: selectedOption == i
