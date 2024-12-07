@@ -61,7 +61,10 @@ class AuthenticationRepo {
       } else {
         final DashboardController dashboardController = Get.find();
         bool isAdmin = await dashboardController.isAdmin(phoneNumber);
-        if (!isAdmin) return Future.value(false);
+        if (!isAdmin) {
+          FirebaseAuth.instance.signOut();
+          return Future.value(false);
+        }
       }
 
       //Routing based on whether present in dashboard or app

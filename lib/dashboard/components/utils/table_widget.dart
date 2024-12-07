@@ -14,6 +14,7 @@ class TableWidget extends StatelessWidget {
     return Expanded(
       flex: 3,
       child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Obx(() {
@@ -31,8 +32,11 @@ class TableWidget extends StatelessWidget {
                 controller.data.length,
                 (index) => DataRow(
                   cells: [
-                    DataCell(Text(
-                      '${index + 1}',
+                    DataCell(SizedBox(
+                      width: 20,
+                      child: Text(
+                        '${index + 1}',
+                      ),
                     )),
                     DataCell(SizedBox(
                       width: 200,

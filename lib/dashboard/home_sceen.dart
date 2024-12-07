@@ -110,13 +110,13 @@ class _HomeScreenState extends State<HomeScreen> {
               sections: [
                 PieChartSectionData(
                   value: value,
-                  title: '$value%',
+                  title: '${value.toStringAsFixed(2)}%',
                   color: color,
                   radius: 50,
                 ),
                 PieChartSectionData(
                   value: 100 - value,
-                  title: '${100 - value}%',
+                  title: '${(100 - value).toStringAsFixed(2)}%',
                   color: Colors.grey,
                   radius: 50,
                 ),
