@@ -15,6 +15,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+
   if (kIsWeb) {
     Get.put(DashboardController());
   } else {

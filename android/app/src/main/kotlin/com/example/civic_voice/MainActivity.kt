@@ -1,4 +1,4 @@
-package com.example.civic_voice
+package com.civic_voice.app
 
 import io.flutter.embedding.android.FlutterActivity
 

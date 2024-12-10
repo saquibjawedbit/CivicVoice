@@ -14,12 +14,18 @@ class LocationController extends GetxController {
     await _geolocatorRepo.requestPermission();
   }
 
-  Future<void> requestAddress() async {
-    Position position = await _geolocatorRepo.determineLocation();
+  Future<bool> requestAddress() async {
+    Position? position = await _geolocatorRepo.determineLocation();
+
+    if (position == null) {
+      return false;
+    }
 
     _address = await _geolocatorRepo.getAddress(position);
     latitude = position.latitude;
     longitude = position.longitude;
+
+    return true;
   }
 
   String get address => _address;

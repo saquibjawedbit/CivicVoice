@@ -49,12 +49,17 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           _isLoading = true;
         });
-        await _locationController.requestAddress();
-        if (imageFile != null) {
+        bool granted = await _locationController.requestAddress();
+        if (imageFile != null && granted) {
           Get.to(
             () => SubmitScreen(imageFile: imageFile!),
             transition: Transition.fadeIn,
           );
+        } else {
+          setState(() {
+            _isLoading = false;
+          });
+          Get.snackbar("Location !", "Please turn on your locations");
         }
       } catch (e) {
         debugPrint("Error capturing image: $e");

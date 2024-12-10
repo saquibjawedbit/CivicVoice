@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:civic_voice/components/utils/buttons/primary_blue_button.dart';
 import 'package:civic_voice/components/constants/category_complaint.dart';
@@ -36,6 +38,8 @@ class _SubmitDetailScreenState extends State<SubmitDetailScreen> {
   final LocationController _locationController = Get.find();
   final DBController _dbController = Get.find();
 
+  bool _isLoading = false;
+
   @override
   void initState() {
     setState(() {
@@ -57,8 +61,20 @@ class _SubmitDetailScreenState extends State<SubmitDetailScreen> {
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-        child: SingleChildScrollView(
-          child: _form(context),
+        child: Stack(
+          children: [
+            if (_isLoading)
+              Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: Colors.white.withOpacity(0.5),
+                alignment: Alignment.center,
+                child: const CircularProgressIndicator(),
+              ),
+            SingleChildScrollView(
+              child: _form(context),
+            ),
+          ],
         ),
       ),
     );
@@ -149,11 +165,18 @@ class _SubmitDetailScreenState extends State<SubmitDetailScreen> {
 
   void _onSubmit() async {
     if (_formKey.currentState!.validate()) {
-      // String? url = await _dbController.uploadImage(File(widget.image.path));
+      setState(() {
+        _isLoading = true;
+      });
+      String? url = await _dbController.uploadImage(File(widget.image.path));
 
-      // if (url == null) {
-      //   return;
-      // }
+      if (url == null) {
+        Get.snackbar("Something went wrong !", "Not able to upload image");
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      }
       double lats = _locationController.lats;
       double longs = _locationController.longs;
       ComplainModel complainModel = ComplainModel(
@@ -163,7 +186,7 @@ class _SubmitDetailScreenState extends State<SubmitDetailScreen> {
         complaintDate: Timestamp.fromDate(DateTime.now()),
         address: addressController.value.text,
         landMark: landmarkController.value.text,
-        imageUrl: "https://picsum.photos/200/300",
+        imageUrl: url,
         userId: FirebaseAuth.instance.currentUser!.uid,
         latitude: lats,
         longitude: longs,
