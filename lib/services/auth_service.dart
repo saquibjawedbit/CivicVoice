@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  static const String ALLOWED_DOMAIN = 'bitmesra.ac.in';
+  static const String allowedDomain = 'bitmesra.ac.in';
 
   bool _isAllowedDomain(String email) {
-    return email.toLowerCase().endsWith('@$ALLOWED_DOMAIN');
+    return email.toLowerCase().endsWith('@$allowedDomain');
   }
 
   Future<UserCredential?> signInWithEmail(String email, String password) async {
@@ -22,7 +23,7 @@ class AuthService {
         password: password,
       );
     } catch (e) {
-      print('Error signing in with email: $e');
+      debugPrint('Error signing in with email: $e');
       rethrow;
     }
   }
@@ -42,7 +43,7 @@ class AuthService {
         password: password,
       );
     } catch (e) {
-      print('Error registering with email: $e');
+      debugPrint('Error registering with email: $e');
       rethrow;
     }
   }

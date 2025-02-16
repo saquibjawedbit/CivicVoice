@@ -1,18 +1,17 @@
 import 'package:civic_voice/components/utils/buttons/primary_blue_button.dart';
-import 'package:civic_voice/screens/authentication/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../components/controller/authentication_controller.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({Key? key}) : super(key: key);
+class SignUpScreen extends StatelessWidget {
+  SignUpScreen({super.key});
 
-  final AuthenticationController controller =
-      Get.put(AuthenticationController());
   final _formKey = GlobalKey<FormState>();
-
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  final AuthenticationController controller =
+      Get.find<AuthenticationController>();
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +20,7 @@ class LoginScreen extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 24,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Stack(
             children: [
               Center(
@@ -47,9 +44,8 @@ class LoginScreen extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   );
                 }
-
                 return const SizedBox();
-              })
+              }),
             ],
           ),
         ),
@@ -63,7 +59,7 @@ class LoginScreen extends StatelessWidget {
       child: Column(
         children: [
           TextFormField(
-            controller: emailController,
+            controller: _emailController,
             cursorColor: Theme.of(context).colorScheme.primary,
             keyboardType: TextInputType.emailAddress,
             decoration: const InputDecoration(
@@ -85,7 +81,7 @@ class LoginScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           TextFormField(
-            controller: passwordController,
+            controller: _passwordController,
             cursorColor: Theme.of(context).colorScheme.primary,
             obscureText: true,
             decoration: const InputDecoration(
@@ -105,26 +101,47 @@ class LoginScreen extends StatelessWidget {
               return null;
             },
           ),
+          const SizedBox(height: 12),
+          TextFormField(
+            controller: _confirmPasswordController,
+            cursorColor: Theme.of(context).colorScheme.primary,
+            obscureText: true,
+            decoration: const InputDecoration(
+              labelText: "Confirm Password",
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 18,
+                horizontal: 16,
+              ),
+            ),
+            style: Theme.of(context).textTheme.labelMedium,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please confirm your password';
+              }
+              if (value != _passwordController.text) {
+                return 'Passwords do not match';
+              }
+              return null;
+            },
+          ),
           const SizedBox(height: 24),
           PrimaryBlueButton(
-            text: "Login",
+            text: "Sign Up",
             textColor: Colors.white,
             bgColor: Theme.of(context).colorScheme.primary,
             onTap: () async {
               if (_formKey.currentState!.validate()) {
-                await controller.signInWithEmailAndPassword(
-                  email: emailController.text.trim(),
-                  password: passwordController.text,
+                await controller.signUpWithEmailAndPassword(
+                  email: _emailController.text.trim(),
+                  password: _passwordController.text,
                 );
               }
             },
           ),
           const SizedBox(height: 12),
           TextButton(
-            child: const Text("Sign Up"),
-            onPressed: () {
-              Get.to(() => SignUpScreen());
-            },
+            child: const Text("Already have an account? Login"),
+            onPressed: () => Get.back(),
           ),
         ],
       ),

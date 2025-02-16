@@ -3,8 +3,8 @@ import 'package:civic_voice/screens/authentication/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({super.key});
+class LandingScreen extends StatelessWidget {
+  const LandingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

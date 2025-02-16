@@ -73,7 +73,7 @@ class _UserInfoState extends State<UserInfo> {
                             height: 4,
                           ),
                           Text(
-                            "Email Id: ${_userModel!.email ?? "Not Updated"}",
+                            "Email Id: ${_userModel!.email}",
                             style: Theme.of(context).textTheme.displayLarge,
                           ),
                           const SizedBox(

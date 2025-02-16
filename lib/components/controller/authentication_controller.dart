@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 class AuthenticationController extends GetxController {
   final AuthenticationRepo _auth = AuthenticationRepo();
+  var isLoading = false.obs;
 
   @override
   void onInit() {
@@ -11,15 +12,27 @@ class AuthenticationController extends GetxController {
     super.onInit();
   }
 
-  var isLoading = false.obs;
-
-  void sendOTP(String phoneNumber) async {
+  Future<void> signUpWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
     isLoading.value = true;
-    await _auth.sendOTP(phoneNumber);
+
+    await _auth.signUpWithEmailAndPassword(email, password);
+
+    await Future.delayed(const Duration(seconds: 1));
+    isLoading.value = false;
   }
 
-  Future<bool> verifyOTP(String code) async {
-    bool value = await _auth.verifyOTP(code);
-    return value;
+  Future<void> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    isLoading.value = true;
+
+    await _auth.loginWithEmailAndPassword(email, password);
+
+    await Future.delayed(const Duration(seconds: 1));
+    isLoading.value = false;
   }
 }

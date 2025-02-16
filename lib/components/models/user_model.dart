@@ -1,14 +1,16 @@
 class UserModel {
   String? id;
-  String? email;
-  String phoneNumber;
+  String email;
+  String? password;
+  String? phoneNumber;
   String? name;
   int complaintCount;
 
   UserModel({
     this.id,
-    this.email,
-    required this.phoneNumber,
+    required this.email,
+    this.password,
+    this.phoneNumber,
     this.name,
     this.complaintCount = 0,
   });
@@ -17,6 +19,7 @@ class UserModel {
   Map<String, dynamic> toMap() {
     return {
       'email': email,
+      'password': password,
       'phoneNumber': phoneNumber,
       'name': name,
       'complaintCount': complaintCount,
