@@ -1,7 +1,5 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import '../services/storage_service.dart';
 import 'package:camera/camera.dart';
 import 'package:civic_voice/components/controller/location_controller.dart';
 import 'package:civic_voice/screens/complain/submit_screen.dart';
