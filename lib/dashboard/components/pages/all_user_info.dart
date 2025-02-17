@@ -108,84 +108,95 @@ class _AllUserInfoState extends State<AllUserInfo> {
                 const SizedBox(
                   height: 12,
                 ),
-                DataTable(
-                  columns: const [
-                    DataColumn(label: Text('S No.')),
-                    DataColumn(label: Text('User Id')),
-                    DataColumn(label: Text('Address')),
-                    DataColumn(label: Text('Problem Category')),
-                    DataColumn(label: Text('Landmark')),
-                    DataColumn(label: Text('Cordinates')),
-                    DataColumn(label: SizedBox()),
-                  ],
-                  rows: List.generate(
-                    _complainsList.length,
-                    (index) => DataRow(
-                      cells: [
-                        DataCell(Text(
-                          '${index + 1}',
-                        )),
-                        DataCell(SizedBox(
-                          width: 200,
-                          child: Text(
-                            _complainsList[index].userId,
-                            softWrap: true,
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: DataTable(
+                    columns: const [
+                      DataColumn(label: Text('S No.')),
+                      DataColumn(label: Text('Roll No')),
+                      DataColumn(label: Text('Sanctioned Moment')),
+                      DataColumn(label: Text('Veirication By')),
+                      DataColumn(label: Text('Verification Status')),
+                      DataColumn(label: Text('Authentication Authority')),
+                      DataColumn(
+                          label: Text('Authentication Authority Status')),
+                      DataColumn(label: Text('Sanctioning Authority')),
+                      DataColumn(label: Text('Sanctioning Authority Status')),
+                      DataColumn(label: Text('Address')),
+                      DataColumn(label: Text('Problem Category')),
+                      DataColumn(label: Text('Landmark')),
+                      DataColumn(label: Text('Cordinates')),
+                      DataColumn(label: SizedBox()),
+                    ],
+                    rows: List.generate(
+                      _complainsList.length,
+                      (index) => DataRow(
+                        cells: [
+                          DataCell(Text(
+                            '${index + 1}',
+                          )),
+                          DataCell(SizedBox(
+                            width: 200,
+                            child: Text(
+                              _complainsList[index].userId,
+                              softWrap: true,
+                              style: _textStyle(),
+                            ),
+                          )),
+                          DataCell(SizedBox(
+                            width: 200,
+                            child: Text(
+                              _complainsList[index].address,
+                              softWrap: true,
+                              style: _textStyle(),
+                            ),
+                          )),
+                          DataCell(Text(
+                            _complainsList[index].category,
                             style: _textStyle(),
-                          ),
-                        )),
-                        DataCell(SizedBox(
-                          width: 200,
-                          child: Text(
-                            _complainsList[index].address,
-                            softWrap: true,
+                          )),
+                          DataCell(Text(
+                            _complainsList[index].landMark.toString(),
                             style: _textStyle(),
+                          )),
+                          DataCell(Text(
+                            "${_complainsList[index].latitude} ${_complainsList[index].longitude}",
+                            style: _textStyle(),
+                          )),
+                          DataCell(
+                            PopupMenuButton<String>(
+                              icon: const Icon(Icons.more_vert),
+                              onSelected: (value) {
+                                // Handle menu item selection
+                                switch (value) {
+                                  case 'Open Problem':
+                                    Get.to(
+                                      () => ComplaintInfo(
+                                        complainId: _complainsList[index].id!,
+                                      ),
+                                    );
+                                    break;
+                                  case 'User Info':
+                                    // Add action for Option 2
+                                    Get.to(() => UserInfo(
+                                        uid: _complainsList[index].userId));
+                                    break;
+                                }
+                              },
+                              itemBuilder: (context) => [
+                                const PopupMenuItem<String>(
+                                  value: 'Open Problem',
+                                  child: Text('Open Problem'),
+                                ),
+                                const PopupMenuItem<String>(
+                                  value: 'User Info',
+                                  child: Text('User Info'),
+                                ),
+                              ],
+                            ),
                           ),
-                        )),
-                        DataCell(Text(
-                          _complainsList[index].category,
-                          style: _textStyle(),
-                        )),
-                        DataCell(Text(
-                          _complainsList[index].landMark.toString(),
-                          style: _textStyle(),
-                        )),
-                        DataCell(Text(
-                          "${_complainsList[index].latitude} ${_complainsList[index].longitude}",
-                          style: _textStyle(),
-                        )),
-                        DataCell(
-                          PopupMenuButton<String>(
-                            icon: const Icon(Icons.more_vert),
-                            onSelected: (value) {
-                              // Handle menu item selection
-                              switch (value) {
-                                case 'Open Problem':
-                                  Get.to(
-                                    () => ComplaintInfo(
-                                      complainId: _complainsList[index].id!,
-                                    ),
-                                  );
-                                  break;
-                                case 'User Info':
-                                  // Add action for Option 2
-                                  Get.to(() => UserInfo(
-                                      uid: _complainsList[index].userId));
-                                  break;
-                              }
-                            },
-                            itemBuilder: (context) => [
-                              const PopupMenuItem<String>(
-                                value: 'Open Problem',
-                                child: Text('Open Problem'),
-                              ),
-                              const PopupMenuItem<String>(
-                                value: 'User Info',
-                                child: Text('User Info'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 )

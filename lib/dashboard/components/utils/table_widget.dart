@@ -22,11 +22,11 @@ class TableWidget extends StatelessWidget {
             return DataTable(
               columns: const [
                 DataColumn(label: Text('S No.')),
-                DataColumn(label: Text('User Id')),
+                DataColumn(label: Text('Roll No')),
                 DataColumn(label: Text('Address')),
                 DataColumn(label: Text('Problem Category')),
                 DataColumn(label: Text('Landmark')),
-                DataColumn(label: Text('Cordinates')),
+                DataColumn(label: Text('Coordinates')),
                 DataColumn(label: SizedBox()),
               ],
               rows: List.generate(

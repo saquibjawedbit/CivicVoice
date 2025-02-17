@@ -104,14 +104,14 @@ class _HomeScreenState extends State<HomeScreen> {
             PieChartData(
               sections: [
                 PieChartSectionData(
-                  value: value,
-                  title: '$value%',
+                  value: value.toPrecision(2),
+                  title: '${value.toStringAsPrecision(2)}%',
                   color: color,
                   radius: 50,
                 ),
                 PieChartSectionData(
-                  value: 100 - value,
-                  title: '${100 - value}%',
+                  value: (100 - value).toPrecision(2),
+                  title: '${(100 - value).toPrecision(2)}%',
                   color: Colors.grey,
                   radius: 50,
                 ),

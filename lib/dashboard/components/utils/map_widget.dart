@@ -17,8 +17,8 @@ class MapWidget extends StatefulWidget {
 class _MapWidgetState extends State<MapWidget> {
   final DashboardController _controller = Get.find();
 
-  double lats = 22.804723;
-  double longs = 86.202840;
+  double lats = 23.416209;
+  double longs = 85.438434;
 
   final MapController _mapController = MapController();
   bool flag = false;
