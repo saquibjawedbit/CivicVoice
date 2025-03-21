@@ -41,7 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     try {
-      _emailController.text = user!.email ?? "";
+      _emailController.text = user!.email;
       _nameController.text = user.name ?? "";
     } catch (e) {
       debugPrint(e.toString());

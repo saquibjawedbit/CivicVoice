@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 
 class StorageService {
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -11,7 +12,7 @@ class StorageService {
       final downloadUrl = await ref.getDownloadURL();
       return downloadUrl;
     } catch (e) {
-      print('Error uploading image: $e');
+      debugPrint('Error uploading image: $e');
       return null;
     }
   }
@@ -29,7 +30,7 @@ class StorageService {
       }
       return downloadUrls;
     } catch (e) {
-      print('Error uploading complaint images: $e');
+      debugPrint('Error uploading complaint images: $e');
       return [];
     }
   }
