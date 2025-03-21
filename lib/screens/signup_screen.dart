@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import '../services/auth_service.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SignupScreenState createState() => _SignupScreenState();
 }
 
@@ -90,13 +90,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     try {
-                      final result = await _authService.registerWithEmail(
-                        _emailController.text,
-                        _passwordController.text,
-                      );
-                      if (result != null) {
-                        Get.back(); // Return to login screen
-                      }
+                      // TODO:: Register user
                     } catch (e) {
                       setState(() => _errorMessage = e.toString());
                     }

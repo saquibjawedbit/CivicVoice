@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import '../../components/controller/authentication_controller.dart';
 
 class LoginScreen extends StatelessWidget {
-  LoginScreen({Key? key}) : super(key: key);
+  LoginScreen({super.key});
 
   final AuthenticationController controller =
       Get.put(AuthenticationController());
