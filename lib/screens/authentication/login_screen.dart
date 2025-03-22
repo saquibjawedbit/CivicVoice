@@ -33,8 +33,25 @@ class LoginScreen extends StatelessWidget {
                     children: [
                       Image.asset(
                         "assets/images/logo-1.png",
-                        width: 320,
+                        width: 120,
                       ),
+                      const SizedBox(height: 32),
+                      Text(
+                        "Welcome Back",
+                        style:
+                            Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "Login to continue",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Colors.grey[600],
+                            ),
+                      ),
+                      const SizedBox(height: 24),
                       _form(context),
                     ],
                   ),
@@ -61,49 +78,91 @@ class LoginScreen extends StatelessWidget {
     return Form(
       key: _formKey,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextFormField(
-            controller: emailController,
-            cursorColor: Theme.of(context).colorScheme.primary,
-            keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(
-              labelText: "Email Address",
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 18,
-                horizontal: 16,
-              ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(12),
             ),
-            style: Theme.of(context).textTheme.labelMedium,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Email is required';
-              } else if (!GetUtils.isEmail(value)) {
-                return 'Please enter a valid email';
-              }
-              return null;
-            },
+            child: TextFormField(
+              controller: emailController,
+              cursorColor: Theme.of(context).colorScheme.primary,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                labelText: "Email Address",
+                prefixIcon: Icon(Icons.email_outlined,
+                    color: Theme.of(context).colorScheme.primary),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 18,
+                  horizontal: 16,
+                ),
+                border: InputBorder.none,
+              ),
+              style: Theme.of(context).textTheme.labelMedium,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Email is required';
+                } else if (!GetUtils.isEmail(value)) {
+                  return 'Please enter a valid email';
+                } else if (!value.toLowerCase().endsWith('@bitmesra.ac.in')) {
+                  return 'Use your college email id';
+                }
+                return null;
+              },
+            ),
           ),
-          const SizedBox(height: 12),
-          TextFormField(
-            controller: passwordController,
-            cursorColor: Theme.of(context).colorScheme.primary,
-            obscureText: true,
-            decoration: const InputDecoration(
-              labelText: "Password",
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 18,
-                horizontal: 16,
+          const SizedBox(height: 16),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: TextFormField(
+              controller: passwordController,
+              cursorColor: Theme.of(context).colorScheme.primary,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: "Password",
+                prefixIcon: Icon(Icons.lock_outline,
+                    color: Theme.of(context).colorScheme.primary),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 18,
+                  horizontal: 16,
+                ),
+                border: InputBorder.none,
+              ),
+              style: Theme.of(context).textTheme.labelMedium,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Password is required';
+                } else if (value.length < 6) {
+                  return 'Password must be at least 6 characters';
+                }
+                return null;
+              },
+            ),
+          ),
+          const SizedBox(height: 8),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              onPressed: () {
+                // Handle forgot password functionality
+                Get.snackbar(
+                  'Forgot Password',
+                  'Reset password link will be sent to your email',
+                  snackPosition: SnackPosition.BOTTOM,
+                );
+              },
+              child: Text(
+                "Forgot Password?",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-            style: Theme.of(context).textTheme.labelMedium,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Password is required';
-              } else if (value.length < 6) {
-                return 'Password must be at least 6 characters';
-              }
-              return null;
-            },
           ),
           const SizedBox(height: 24),
           PrimaryBlueButton(
@@ -119,12 +178,27 @@ class LoginScreen extends StatelessWidget {
               }
             },
           ),
-          const SizedBox(height: 12),
-          TextButton(
-            child: const Text("Sign Up"),
-            onPressed: () {
-              Get.to(() => SignUpScreen());
-            },
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Don't have an account?",
+                style: TextStyle(color: Colors.grey[600]),
+              ),
+              TextButton(
+                child: Text(
+                  "Sign Up",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                onPressed: () {
+                  Get.to(() => SignUpScreen());
+                },
+              ),
+            ],
           ),
         ],
       ),
