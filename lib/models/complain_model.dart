@@ -1,20 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class ComplainModel {
   final String? id;
   final String title;
   final String description;
   final String category;
-  final Timestamp complaintDate;
+  final DateTime complaintDate;
   final String address;
   final String? landMark;
   final String imageUrl;
   final double latitude;
   final double longitude;
   final int status;
-  final Timestamp? resolvedDate;
+  final DateTime? resolvedDate;
   final String userId;
-  final DocumentReference? adminId;
+  final String? adminId;
 
   ComplainModel({
     this.id,
@@ -73,13 +71,13 @@ class ComplainModel {
       title: map['title'] ?? '',
       description: map['description'] ?? '',
       category: map['category'] ?? '',
-      complaintDate: (map['complaintDate'] as Timestamp),
+      complaintDate: (map['complaintDate'] as DateTime),
       address: add,
       landMark: map['landMark'],
       imageUrl: map['imageUrl'] ?? '',
       status: map['status'] ?? 0,
       resolvedDate: map['resolvedDate'] != null
-          ? (map['resolvedDate'] as Timestamp)
+          ? (map['resolvedDate'] as DateTime)
           : null,
       userId: map['userId'] ?? '',
       adminId: map['adminId'],

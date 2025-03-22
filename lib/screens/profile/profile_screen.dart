@@ -1,9 +1,7 @@
 import 'dart:io';
 
 import 'package:civic_voice/components/utils/buttons/primary_blue_button.dart';
-import 'package:civic_voice/components/controller/db_controller.dart';
-import 'package:civic_voice/components/models/user_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:civic_voice/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -30,22 +28,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void loadData() async {
-    _phoneController.text =
-        FirebaseAuth.instance.currentUser!.phoneNumber.toString();
+    _phoneController.text = "+91 1234567890";
+    // UserModel? user =
 
-    UserModel? user = _dbController.user;
+    // if (user == null) {
+    //   await _dbController.getUser();
+    //   user = _dbController.user;
+    // }
 
-    if (user == null) {
-      await _dbController.getUser();
-      user = _dbController.user;
-    }
-
-    try {
-      _emailController.text = user!.email;
-      _nameController.text = user.name ?? "";
-    } catch (e) {
-      debugPrint(e.toString());
-    }
+    // try {
+    //   _emailController.text = user!.email;
+    //   _nameController.text = user.name ?? "";
+    // } catch (e) {
+    //   debugPrint(e.toString());
+    // }
   }
 
   Future<void> _pickImage() async {
@@ -56,18 +52,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  final DBController _dbController = Get.find();
   final _formKey = GlobalKey<FormState>();
 
   void _onSubmit() {
     if (_formKey.currentState!.validate()) {
-      String phoneNumber =
-          FirebaseAuth.instance.currentUser!.phoneNumber.toString();
-      String name = _nameController.text.toString();
-      String emailId = _emailController.text.toString();
-      UserModel user =
-          UserModel(phoneNumber: phoneNumber, email: emailId, name: name);
-      _dbController.updateUser(user);
       Get.back();
     }
   }

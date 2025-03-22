@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'signup_screen.dart';
-import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -27,20 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
       });
 
       try {
-        final credential =
-            await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text,
-          password: _passwordController.text,
-        );
-
-        if (credential.user != null) {
-          // Navigate to home screen
-          Get.offAll(() => const HomeScreen());
-        }
-      } on FirebaseAuthException catch (e) {
-        setState(() {
-          _errorMessage = e.message;
-        });
+        //TODO:: SIGN IN WITH EMAIL AND PASSWORD
       } finally {
         setState(() {
           _isLoading = false;

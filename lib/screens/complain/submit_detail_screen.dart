@@ -1,12 +1,9 @@
 import 'package:camera/camera.dart';
 import 'package:civic_voice/components/utils/buttons/primary_blue_button.dart';
 import 'package:civic_voice/components/constants/category_complaint.dart';
-import 'package:civic_voice/components/controller/db_controller.dart';
 import 'package:civic_voice/components/controller/location_controller.dart';
-import 'package:civic_voice/components/models/complain_model.dart';
+import 'package:civic_voice/models/complain_model.dart';
 import 'package:civic_voice/screens/complain/confirmation_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -34,7 +31,6 @@ class _SubmitDetailScreenState extends State<SubmitDetailScreen> {
   String? category;
 
   final LocationController _locationController = Get.find();
-  final DBController _dbController = Get.find();
 
   @override
   void initState() {
@@ -156,20 +152,6 @@ class _SubmitDetailScreenState extends State<SubmitDetailScreen> {
       // }
       double lats = _locationController.lats;
       double longs = _locationController.longs;
-      ComplainModel complainModel = ComplainModel(
-        title: titleController.value.text,
-        description: descriptionController.value.text,
-        category: category!,
-        complaintDate: Timestamp.fromDate(DateTime.now()),
-        address: addressController.value.text,
-        landMark: landmarkController.value.text,
-        imageUrl: "https://picsum.photos/200/300",
-        userId: FirebaseAuth.instance.currentUser!.uid,
-        latitude: lats,
-        longitude: longs,
-      );
-
-      _dbController.storeComplain(complainModel);
 
       Get.offAll(() => const ConfirmationScreen());
     }

@@ -1,6 +1,4 @@
 import 'package:civic_voice/screens/authentication/landing_screen.dart';
-import 'package:civic_voice/screens/home_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
@@ -10,14 +8,6 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.userChanges(),
-        builder: (context, snapshot) {
-          debugPrint("Rebuilding");
-          if (!snapshot.hasData) {
-            return const LandingScreen();
-          }
-          return const HomeScreen();
-        });
+    return const LandingScreen();
   }
 }

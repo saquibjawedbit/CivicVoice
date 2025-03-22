@@ -1,8 +1,6 @@
-import 'package:civic_voice/components/controller/db_controller.dart';
-import 'package:civic_voice/components/models/query_model.dart';
+import 'package:civic_voice/models/query_model.dart';
 import 'package:civic_voice/components/utils/buttons/primary_blue_button.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,7 +8,6 @@ class ContactUs extends StatelessWidget {
   ContactUs({super.key});
 
   final _formKey = GlobalKey<FormState>();
-  final DBController _dbController = Get.find();
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -105,14 +102,6 @@ class ContactUs extends StatelessWidget {
 
   void _onSubmit() async {
     if (_formKey.currentState!.validate()) {
-      final String uid = FirebaseAuth.instance.currentUser!.uid;
-      QueryModel query = QueryModel(
-        userId: uid,
-        title: _titleController.text,
-        description: _descriptionController.text,
-        createdAt: Timestamp.fromDate(DateTime.now()),
-      );
-      await _dbController.storeQuery(query);
       Get.back();
       Get.snackbar("Success!", "Your Feedback is sent, Thank You!");
     }

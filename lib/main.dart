@@ -1,18 +1,15 @@
 import 'package:civic_voice/components/constants/colors.dart';
-import 'package:civic_voice/components/controller/db_controller.dart';
 import 'package:civic_voice/screens/app.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
-
-  final DBController controller = Get.put(DBController());
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

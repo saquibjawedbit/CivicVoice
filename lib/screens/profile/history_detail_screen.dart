@@ -1,5 +1,5 @@
 import 'package:civic_voice/components/utils/buttons/primary_blue_button.dart';
-import 'package:civic_voice/components/models/complain_model.dart';
+import 'package:civic_voice/models/complain_model.dart';
 import 'package:flutter/material.dart';
 import 'package:civic_voice/screens/contact-us/contact_us.dart';
 import 'package:get/get.dart';
@@ -45,7 +45,7 @@ class HistoryDetailScreen extends StatelessWidget {
         height: 16,
       ),
       Text(
-        "Created At: ${complainModel.complaintDate.toDate().toString().substring(0, 10)}",
+        "Created At: ${complainModel.complaintDate.toString().substring(0, 10)}",
         style: Theme.of(context).textTheme.displayMedium,
       ),
       const SizedBox(

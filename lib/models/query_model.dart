@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class QueryModel {
   final String userId;
   final String title;
   final String description;
-  final Timestamp createdAt;
+  final DateTime createdAt;
   final String? adminId;
 
   QueryModel({

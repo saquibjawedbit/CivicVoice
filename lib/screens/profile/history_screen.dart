@@ -1,5 +1,4 @@
-import 'package:civic_voice/components/controller/db_controller.dart';
-import 'package:civic_voice/components/models/complain_model.dart';
+import 'package:civic_voice/models/complain_model.dart';
 import 'package:civic_voice/screens/profile/history_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,7 +14,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
   List<ComplainModel> list = [];
 
   late List<ComplainModel> _filteredItems;
-  final DBController _dbController = Get.find();
 
   @override
   void initState() {
@@ -24,7 +22,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   void _loadData() async {
-    list = await _dbController.getHistory();
+    //TODO:: Load data from database
     setState(() {
       _filteredItems = list;
     });
@@ -104,11 +102,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             ),
       ),
       subtitle: Text(
-        _filteredItems[index]
-            .complaintDate
-            .toDate()
-            .toString()
-            .substring(0, 10),
+        _filteredItems[index].complaintDate.toString().substring(0, 10),
         style: TextStyle(
           color: Theme.of(context).colorScheme.onPrimary,
         ),
