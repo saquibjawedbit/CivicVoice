@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiClient {
   static const String baseUrl =
-      'http://localhost:5000'; // Replace with your actual API base URL
+      'http://10.0.2.2:5000'; // Replace with your actual API base URL
   static const String tokenKey = 'auth_token';
 
   // Variable to store temporary token for specific requests
