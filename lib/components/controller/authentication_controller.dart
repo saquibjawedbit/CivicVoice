@@ -1,7 +1,7 @@
 import 'package:civic_voice/components/auth/authentication_repo.dart';
 import 'package:civic_voice/components/utils/permission-handler/parmission_handler.dart';
-import 'package:civic_voice/screens/home_screen.dart';
 import 'package:civic_voice/screens/authentication/otp_verification_screen.dart';
+import 'package:civic_voice/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -156,14 +156,116 @@ class AuthenticationController extends GetxController {
       await Future.delayed(const Duration(seconds: 2));
       debugPrint('Password reset email sent to $email');
 
-      Get.snackbar(
-        'Password Reset',
-        'Check your email for a password reset link',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      // Show a responsive alert dialog
+      Get.dialog(
+        Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          // Making the dialog responsive with constraints
+          insetPadding:
+              const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+          child: LayoutBuilder(builder: (context, constraints) {
+            // Adjust to the screen size
+            double maxWidth = constraints.maxWidth;
+            double dialogWidth = maxWidth > 450 ? 450 : maxWidth;
 
-      // Return to login screen
-      Get.back();
+            return Container(
+              width: dialogWidth,
+              constraints: const BoxConstraints(
+                maxWidth: 450,
+                // Adjust height based on content
+                minHeight: 100,
+              ),
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header with icon
+                  Row(
+                    children: [
+                      Icon(Icons.check_circle,
+                          color: Colors.green, size: maxWidth < 300 ? 20 : 28),
+                      SizedBox(width: maxWidth < 300 ? 6 : 10),
+                      Flexible(
+                        child: Text(
+                          'Password Reset Email Sent',
+                          style: TextStyle(
+                            fontSize: maxWidth < 300 ? 16 : 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  // Body content
+                  Text(
+                    'We have sent a password reset link to:',
+                    style: TextStyle(fontSize: maxWidth < 300 ? 14 : 16),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    width: double.infinity,
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      email,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: maxWidth < 300 ? 14 : 16,
+                        color: Get.theme.colorScheme.primary,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Please check your email and follow the instructions to reset your password.',
+                    style: TextStyle(fontSize: maxWidth < 300 ? 14 : 16),
+                  ),
+                  const SizedBox(height: 24),
+                  // Action button
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Get.theme.colorScheme.primary,
+                        foregroundColor: Colors.white,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: maxWidth < 300 ? 16 : 24,
+                          vertical: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: Text(
+                        'OK',
+                        style: TextStyle(
+                          fontSize: maxWidth < 300 ? 14 : 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onPressed: () {
+                        Get.back(); // Close dialog
+                        Get.back(); // Return to login screen
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
+        ),
+        barrierDismissible: false,
+      );
     } catch (e) {
       Get.snackbar(
         'Error',

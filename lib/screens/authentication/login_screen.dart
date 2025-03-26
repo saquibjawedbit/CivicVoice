@@ -1,4 +1,5 @@
 import 'package:civic_voice/components/utils/buttons/primary_blue_button.dart';
+import 'package:civic_voice/screens/authentication/forgot_password_screen.dart';
 import 'package:civic_voice/screens/authentication/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -148,12 +149,8 @@ class LoginScreen extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: TextButton(
               onPressed: () {
-                // Handle forgot password functionality
-                Get.snackbar(
-                  'Forgot Password',
-                  'Reset password link will be sent to your email',
-                  snackPosition: SnackPosition.BOTTOM,
-                );
+                // Navigate to forgot password screen
+                Get.to(() => ForgotPasswordScreen());
               },
               child: Text(
                 "Forgot Password?",
