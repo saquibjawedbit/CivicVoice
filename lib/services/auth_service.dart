@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:civic_voice/services/api_client.dart';
+import 'package:civic_voice/services/token_storage.dart';
 
 class AuthService {
   static const String allowedDomain = 'bitmesra.ac.in';
@@ -16,7 +17,7 @@ class AuthService {
 
       // Store token if provided in the response
       if (response.containsKey('token')) {
-        await ApiClient.setToken(response['token']);
+        await TokenStorage.saveToken(response['token']);
       }
 
       return response;
@@ -36,7 +37,7 @@ class AuthService {
 
       // Store token if provided in the response
       if (response.containsKey('token')) {
-        await ApiClient.setToken(response['token']);
+        await TokenStorage.saveToken(response['token']);
       }
 
       return response;
@@ -64,6 +65,8 @@ class AuthService {
   Future<Map<String, dynamic>> getMe() async {
     try {
       final response = await ApiClient.get('/me');
+      // Refresh token expiry on successful me request
+      await TokenStorage.refreshTokenExpiry();
       return response;
     } catch (e) {
       debugPrint('Get user info error: $e');
@@ -85,7 +88,7 @@ class AuthService {
 
       // Store or update token if provided in the response
       if (response.containsKey('token')) {
-        await ApiClient.setToken(response['token']);
+        await TokenStorage.saveToken(response['token']);
       }
 
       // Clear custom token header after request
@@ -134,7 +137,7 @@ class AuthService {
   Future<void> logout() async {
     try {
       await ApiClient.get('/logout');
-      await ApiClient.clearToken();
+      await TokenStorage.clearToken();
     } catch (e) {
       debugPrint('Logout error: $e');
       rethrow;
@@ -143,7 +146,6 @@ class AuthService {
 
   // Check if user is authenticated
   Future<bool> isAuthenticated() async {
-    final token = await ApiClient.getToken();
-    return token != null;
+    return await TokenStorage.hasValidToken();
   }
 }
