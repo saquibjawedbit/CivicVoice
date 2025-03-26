@@ -11,6 +11,9 @@ class AuthenticationController extends GetxController {
   var isLoading = false.obs;
   var user = Rxn<Map<String, dynamic>>();
 
+  // Store authentication token
+  final _token = Rxn<String>();
+
   // Store temporary data during signup process
   final _tempEmail = ''.obs;
   final _tempPassword = ''.obs;
@@ -71,7 +74,13 @@ class AuthenticationController extends GetxController {
       _tempPassword.value = password;
 
       // Call the API to create account and trigger OTP sending
-      await _auth.signUpWithEmailAndPassword(email, password);
+      final response = await _auth.signUpWithEmailAndPassword(email, password);
+
+      // Store token if provided in response
+      if (response.containsKey('token')) {
+        _token.value = response['token'];
+        debugPrint('Token received from signup: ${_token.value}');
+      }
 
       // Navigate to OTP verification screen
       Get.to(() => OtpVerificationScreen(
@@ -95,7 +104,13 @@ class AuthenticationController extends GetxController {
   Future<void> resendOTP() async {
     try {
       isLoading.value = true;
-      await _auth.resendOTP();
+      final response = await _auth.resendOTP(token: _token.value);
+
+      // Update token if provided in the response
+      if (response.containsKey('token')) {
+        _token.value = response['token'];
+        debugPrint('Token updated after resending OTP: ${_token.value}');
+      }
 
       Get.snackbar(
         'OTP Resent',
@@ -121,7 +136,14 @@ class AuthenticationController extends GetxController {
   }) async {
     try {
       isLoading.value = true;
-      await _auth.verifyOTP(otp);
+      debugPrint('Verifying OTP with token: ${_token.value}');
+      final response = await _auth.verifyOTP(otp, token: _token.value);
+
+      // Update token if provided in response
+      if (response.containsKey('token')) {
+        _token.value = response['token'];
+        debugPrint('Token updated after OTP verification: ${_token.value}');
+      }
 
       Get.snackbar(
         'Success',
@@ -154,7 +176,13 @@ class AuthenticationController extends GetxController {
   }) async {
     try {
       isLoading.value = true;
-      await _auth.loginWithEmailAndPassword(email, password);
+      final response = await _auth.loginWithEmailAndPassword(email, password);
+
+      // Store token if provided
+      if (response.containsKey('token')) {
+        _token.value = response['token'];
+        debugPrint('Token received from login: ${_token.value}');
+      }
 
       // Fetch user data after successful login
       await getUserData();
@@ -309,6 +337,7 @@ class AuthenticationController extends GetxController {
       isLoading.value = true;
       await _auth.logout();
       user.value = null;
+      _token.value = null;
 
       // Return to login screen
       Get.offAll(() => LoginScreen());
