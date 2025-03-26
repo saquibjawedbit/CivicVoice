@@ -1,15 +1,13 @@
-import 'package:civic_voice/components/utils/buttons/primary_blue_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:civic_voice/components/utils/buttons/primary_blue_button.dart';
 import '../../components/controller/authentication_controller.dart';
 
-class SignUpScreen extends StatelessWidget {
-  SignUpScreen({super.key});
+class ForgotPasswordScreen extends StatelessWidget {
+  ForgotPasswordScreen({super.key});
 
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
   final AuthenticationController controller =
       Get.find<AuthenticationController>();
 
@@ -17,7 +15,15 @@ class SignUpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      resizeToAvoidBottomInset: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back,
+              color: Theme.of(context).colorScheme.primary),
+          onPressed: () => Get.back(),
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -34,7 +40,7 @@ class SignUpScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 32),
                       Text(
-                        "Create Account",
+                        "Forgot Password",
                         style:
                             Theme.of(context).textTheme.headlineSmall?.copyWith(
                                   fontWeight: FontWeight.bold,
@@ -43,13 +49,14 @@ class SignUpScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        "Sign up to get started",
+                        "Enter your email to receive a password reset link",
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: Colors.grey[600],
                             ),
+                        textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 24),
-                      _form(context),
+                      const SizedBox(height: 32),
+                      _resetForm(context),
                     ],
                   ),
                 ),
@@ -70,7 +77,7 @@ class SignUpScreen extends StatelessWidget {
     );
   }
 
-  Form _form(BuildContext context) {
+  Widget _resetForm(BuildContext context) {
     return Form(
       key: _formKey,
       child: Column(
@@ -108,79 +115,15 @@ class SignUpScreen extends StatelessWidget {
               },
             ),
           ),
-          const SizedBox(height: 16),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: TextFormField(
-              controller: _passwordController,
-              cursorColor: Theme.of(context).colorScheme.primary,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: "Password",
-                prefixIcon: Icon(Icons.lock_outline,
-                    color: Theme.of(context).colorScheme.primary),
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 18,
-                  horizontal: 16,
-                ),
-                border: InputBorder.none,
-              ),
-              style: Theme.of(context).textTheme.labelMedium,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Password is required';
-                } else if (value.length < 6) {
-                  return 'Password must be at least 6 characters';
-                }
-                return null;
-              },
-            ),
-          ),
-          const SizedBox(height: 16),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: TextFormField(
-              controller: _confirmPasswordController,
-              cursorColor: Theme.of(context).colorScheme.primary,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: "Confirm Password",
-                prefixIcon: Icon(Icons.lock_outline,
-                    color: Theme.of(context).colorScheme.primary),
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 18,
-                  horizontal: 16,
-                ),
-                border: InputBorder.none,
-              ),
-              style: Theme.of(context).textTheme.labelMedium,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please confirm your password';
-                }
-                if (value != _passwordController.text) {
-                  return 'Passwords do not match';
-                }
-                return null;
-              },
-            ),
-          ),
           const SizedBox(height: 24),
           PrimaryBlueButton(
-            text: "Sign Up",
+            text: "Reset Password",
             textColor: Colors.white,
             bgColor: Theme.of(context).colorScheme.primary,
             onTap: () async {
               if (_formKey.currentState!.validate()) {
-                await controller.signUpWithEmailAndPassword(
+                await controller.resetPassword(
                   email: _emailController.text.trim(),
-                  password: _passwordController.text,
                 );
               }
             },
@@ -190,7 +133,7 @@ class SignUpScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Already have an account?",
+                "Remember your password?",
                 style: TextStyle(color: Colors.grey[600]),
               ),
               TextButton(
