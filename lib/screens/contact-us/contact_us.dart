@@ -1,4 +1,3 @@
-import 'package:civic_voice/models/query_model.dart';
 import 'package:civic_voice/components/utils/buttons/primary_blue_button.dart';
 
 import 'package:flutter/material.dart';

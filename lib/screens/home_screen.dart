@@ -86,6 +86,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           _isLoading = true;
         });
         await _locationController.requestAddress();
+        debugPrint("Image captured: ${imageFile!.path}");
         if (imageFile != null) {
           Get.to(
             () => SubmitScreen(imageFile: imageFile!),
