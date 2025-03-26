@@ -1,39 +1,49 @@
 class UserModel {
-  String? id;
-  String email;
-  String? password;
-  String? phoneNumber;
-  String? name;
-  int complaintCount;
+  final String id;
+  final String? name;
+  final String email;
+  final String? profilePicture;
+  final bool isVerified;
+  final String? phone;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   UserModel({
-    this.id,
-    required this.email,
-    this.password,
-    this.phoneNumber,
+    required this.id,
     this.name,
-    this.complaintCount = 0,
+    required this.email,
+    this.profilePicture,
+    required this.isVerified,
+    this.phone,
+    this.createdAt,
+    this.updatedAt,
   });
 
-  // Convert UserModel to a map
-  Map<String, dynamic> toMap() {
-    return {
-      'email': email,
-      'password': password,
-      'phoneNumber': phoneNumber,
-      'name': name,
-      'complaintCount': complaintCount,
-    };
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['id'] ?? json['_id'] ?? '',
+      name: json['name'],
+      email: json['email'] ?? '',
+      profilePicture: json['profilePicture'],
+      isVerified: json['isVerified'] ?? false,
+      phone: json['phone'],
+      createdAt:
+          json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
+      updatedAt:
+          json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
+    );
   }
 
-  // Factory constructor to create a UserModel instance from a map
-  factory UserModel.fromMap(Map<String, dynamic> map, String uid) {
-    return UserModel(
-      id: uid, // Assuming the 'id' field is also in the map
-      email: map['email'],
-      phoneNumber: map['phoneNumber'],
-      name: map['name'],
-      complaintCount: map['complaintCount'] ?? 0,
-    );
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'email': email,
+      'profilePicture': profilePicture,
+      'isVerified': isVerified,
+      'phone': phone,
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
+    };
   }
 }

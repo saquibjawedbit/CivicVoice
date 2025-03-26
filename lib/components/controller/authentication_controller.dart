@@ -1,5 +1,6 @@
 import 'package:civic_voice/components/auth/authentication_repo.dart';
 import 'package:civic_voice/components/utils/permission-handler/parmission_handler.dart';
+import 'package:civic_voice/screens/authentication/login_screen.dart';
 import 'package:civic_voice/screens/authentication/otp_verification_screen.dart';
 import 'package:civic_voice/screens/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:get/get.dart';
 class AuthenticationController extends GetxController {
   final AuthenticationRepo _auth = AuthenticationRepo();
   var isLoading = false.obs;
+  var user = Rxn<Map<String, dynamic>>();
 
   // Store temporary data during signup process
   final _tempEmail = ''.obs;
@@ -16,9 +18,47 @@ class AuthenticationController extends GetxController {
   @override
   void onInit() {
     PermissionHandler.requestPermission();
+    checkAuthStatus();
     super.onInit();
   }
 
+  // Check if the user is already authenticated
+  Future<void> checkAuthStatus() async {
+    try {
+      isLoading.value = true;
+      final isAuth = await _auth.isAuthenticated();
+
+      if (isAuth) {
+        // Fetch current user data
+        await getUserData();
+      }
+    } catch (e) {
+      debugPrint('Auth check error: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // Get current user data
+  Future<void> getUserData() async {
+    try {
+      isLoading.value = true;
+      final userData = await _auth.getCurrentUser();
+      user.value = userData;
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to fetch user data: ${e.toString()}',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // Sign up with email and password
   Future<void> signUpWithEmailAndPassword({
     required String email,
     required String password,
@@ -30,8 +70,8 @@ class AuthenticationController extends GetxController {
       _tempEmail.value = email;
       _tempPassword.value = password;
 
-      // Generate and send OTP
-      await _sendOTP(email);
+      // Call the API to create account and trigger OTP sending
+      await _auth.signUpWithEmailAndPassword(email, password);
 
       // Navigate to OTP verification screen
       Get.to(() => OtpVerificationScreen(
@@ -51,20 +91,12 @@ class AuthenticationController extends GetxController {
     }
   }
 
-  Future<void> _sendOTP(String email) async {
-    // Here we would actually send an OTP via email
-    // For now, we'll simulate it with a delay
-    await Future.delayed(const Duration(seconds: 1));
-    debugPrint('OTP sent to $email');
-
-    // In a real implementation, this would call your backend API to send an OTP
-    // await _auth.sendOTP(email);
-  }
-
-  Future<void> resendOTP({required String email}) async {
+  // Resend OTP via API
+  Future<void> resendOTP() async {
     try {
       isLoading.value = true;
-      await _sendOTP(email);
+      await _auth.resendOTP();
+
       Get.snackbar(
         'OTP Resent',
         'A new verification code has been sent to your email',
@@ -83,31 +115,25 @@ class AuthenticationController extends GetxController {
     }
   }
 
+  // Verify OTP via API
   Future<void> verifyOTP({
-    required String email,
-    required String password,
     required String otp,
   }) async {
     try {
       isLoading.value = true;
+      await _auth.verifyOTP(otp);
 
-      // Here we would actually verify the OTP with our backend
-      // For now, let's assume 123456 is the correct OTP
-      if (otp == '123456') {
-        // Register the user after successful verification
-        await _auth.signUpWithEmailAndPassword(email, password);
+      Get.snackbar(
+        'Success',
+        'Account verified successfully!',
+        snackPosition: SnackPosition.BOTTOM,
+      );
 
-        Get.snackbar(
-          'Success',
-          'Account created successfully!',
-          snackPosition: SnackPosition.BOTTOM,
-        );
+      // Fetch user data after successful verification
+      await getUserData();
 
-        // Redirect to home page
-        Get.offAll(() => const HomeScreen());
-      } else {
-        throw Exception('Invalid OTP. Please try again.');
-      }
+      // Redirect to home page
+      Get.offAll(() => const HomeScreen());
     } catch (e) {
       Get.snackbar(
         'Error',
@@ -121,6 +147,7 @@ class AuthenticationController extends GetxController {
     }
   }
 
+  // Login with email and password
   Future<void> signInWithEmailAndPassword({
     required String email,
     required String password,
@@ -128,7 +155,9 @@ class AuthenticationController extends GetxController {
     try {
       isLoading.value = true;
       await _auth.loginWithEmailAndPassword(email, password);
-      await Future.delayed(const Duration(seconds: 1));
+
+      // Fetch user data after successful login
+      await getUserData();
 
       // Redirect to home page after successful login
       Get.offAll(() => const HomeScreen());
@@ -145,16 +174,11 @@ class AuthenticationController extends GetxController {
     }
   }
 
+  // Reset password (forgot password)
   Future<void> resetPassword({required String email}) async {
     try {
       isLoading.value = true;
-
-      // In a real implementation, this would call your backend API to send a reset link
-      // await _auth.sendPasswordResetEmail(email);
-
-      // For now, simulate with a delay
-      await Future.delayed(const Duration(seconds: 2));
-      debugPrint('Password reset email sent to $email');
+      await _auth.sendPasswordResetEmail(email);
 
       // Show a responsive alert dialog
       Get.dialog(
@@ -270,6 +294,28 @@ class AuthenticationController extends GetxController {
       Get.snackbar(
         'Error',
         'Failed to send password reset email: ${e.toString()}',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // Logout and clear user data
+  Future<void> logout() async {
+    try {
+      isLoading.value = true;
+      await _auth.logout();
+      user.value = null;
+
+      // Return to login screen
+      Get.offAll(() => LoginScreen());
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to logout: ${e.toString()}',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
         colorText: Colors.white,

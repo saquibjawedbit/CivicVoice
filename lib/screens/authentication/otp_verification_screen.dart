@@ -8,10 +8,10 @@ class OtpVerificationScreen extends StatefulWidget {
   final String password;
 
   const OtpVerificationScreen({
-    Key? key,
+    super.key,
     required this.email,
     required this.password,
-  }) : super(key: key);
+  });
 
   @override
   State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
@@ -47,8 +47,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       String otp = _otpControllers.map((controller) => controller.text).join();
       if (otp.length == 6) {
         await controller.verifyOTP(
-          email: widget.email,
-          password: widget.password,
           otp: otp,
         );
       }
@@ -56,7 +54,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   }
 
   void _resendOTP() async {
-    await controller.resendOTP(email: widget.email);
+    await controller.resendOTP();
   }
 
   @override
