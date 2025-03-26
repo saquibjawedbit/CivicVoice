@@ -206,6 +206,68 @@ class _ProfileScreenState extends State<ProfileScreen>
     return regex.hasMatch(value);
   }
 
+  void _logout() {
+    // Show confirmation dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Text('Logout'),
+          content: const Text('Are you sure you want to logout?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              onPressed: () {
+                // Close dialog
+                Navigator.of(context).pop();
+
+                // Show loading indicator
+                setState(() {
+                  _isUploading = true;
+                });
+
+                // Simulate logout process with delay
+                Future.delayed(const Duration(milliseconds: 800), () {
+                  setState(() {
+                    _isUploading = false;
+                  });
+
+                  // Navigate to login screen or home screen
+                  Get.offAllNamed('/login');
+
+                  // Show success snackbar
+                  Get.snackbar(
+                    "Success",
+                    "Logged out successfully",
+                    snackPosition: SnackPosition.TOP,
+                    backgroundColor: Colors.green,
+                    colorText: Colors.white,
+                    duration: const Duration(seconds: 2),
+                    margin: const EdgeInsets.all(10),
+                  );
+                });
+              },
+              child: const Text('Logout'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     _animationController.dispose();
@@ -262,6 +324,32 @@ class _ProfileScreenState extends State<ProfileScreen>
                           text: "Save Changes",
                           textColor: Colors.white,
                           onTap: _onSubmit,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    // Add logout button
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton.icon(
+                          icon: const Icon(Icons.logout, color: Colors.red),
+                          label: const Text(
+                            "Logout",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(color: Colors.red),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: _logout,
                         ),
                       ),
                     ),
@@ -513,6 +601,22 @@ class _ProfileScreenState extends State<ProfileScreen>
                 subtitle: const Text('English (US)'),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {},
+              ),
+              const Divider(),
+              // Add logout option in preferences
+              ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.red.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.logout, color: Colors.red),
+                ),
+                title: const Text('Logout'),
+                subtitle: const Text('Sign out from your account'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: _logout,
               ),
             ],
           ),
