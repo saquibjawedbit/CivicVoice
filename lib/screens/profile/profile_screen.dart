@@ -217,15 +217,35 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
+      backgroundColor: Colors.grey[100],
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text('Profile'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text(
+          'My Profile',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
         actions: [
-          TextButton(
-            onPressed: () => _showLogoutConfirmation(),
-            child: const Text(
-              'Logout',
-              style: TextStyle(color: Colors.red),
+          Container(
+            margin: const EdgeInsets.only(right: 16),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: IconButton(
+              onPressed: () => _showLogoutConfirmation(),
+              icon: const Icon(
+                Icons.logout_rounded,
+                color: Colors.white,
+              ),
+              tooltip: 'Logout',
             ),
           ),
         ],
@@ -239,53 +259,74 @@ class _ProfileScreenState extends State<ProfileScreen>
         return AnimatedBuilder(
           animation: _animation,
           builder: (context, child) {
-            return FadeTransition(
-              opacity: _animation,
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _buildProfileImage(),
-                    const SizedBox(height: 24),
-                    _buildInputField(
-                      label: 'Full Name',
-                      controller: _nameController,
-                      icon: Icons.person,
-                      enabled: false,
+            return Stack(
+              children: [
+                // Top background gradient
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        theme.primaryColor,
+                        theme.primaryColor.withBlue(255),
+                      ],
                     ),
-                    const SizedBox(height: 16),
-                    _buildInputField(
-                      label: 'Email',
-                      controller: _emailController,
-                      icon: Icons.email,
-                      enabled: false,
-                    ),
-                    const SizedBox(height: 16),
-                    _buildInputField(
-                      label: 'Phone Number',
-                      controller: _phoneController,
-                      icon: Icons.phone,
-                      enabled: false,
-                    ),
-                    const SizedBox(height: 40),
-                    PrimaryBlueButton(
-                      text: 'Update Profile',
-                      textColor: Colors.white,
-                      bgColor: Theme.of(context).primaryColor,
-                      onTap: () {
-                        // Profile update logic would go here
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                                'Profile update functionality coming soon'),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+
+                // Main content
+                FadeTransition(
+                  opacity: _animation,
+                  child: SafeArea(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          // Profile header with image
+                          _buildProfileHeader(),
+                          const SizedBox(height: 20),
+
+                          // Profile details card
+                          _buildProfileDetailsCard(),
+
+                          const SizedBox(height: 16),
+
+                          // Stats cards
+                          _buildStatsSection(),
+
+                          const SizedBox(height: 16),
+
+                          // Social links
+                          _buildSocialSection(),
+
+                          const SizedBox(height: 30),
+
+                          // Update button
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: PrimaryBlueButton(
+                              text: 'Update Profile',
+                              textColor: Colors.white,
+                              bgColor: theme.primaryColor,
+                              onTap: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Profile update functionality coming soon'),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             );
           },
         );
@@ -293,15 +334,296 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
   }
 
+  Widget _buildProfileHeader() {
+    return Column(
+      children: [
+        _buildProfileImage(),
+        const SizedBox(height: 15),
+        Text(
+          _nameController.text,
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        Text(
+          _emailController.text,
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.white.withOpacity(0.8),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProfileDetailsCard() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Personal Information',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
+            _buildDetailItem(
+              label: 'Full Name',
+              value: _nameController.text,
+              icon: Icons.person,
+            ),
+            _buildDetailItem(
+              label: 'Email',
+              value: _emailController.text,
+              icon: Icons.email,
+            ),
+            _buildDetailItem(
+              label: 'Phone',
+              value: _phoneController.text.isNotEmpty
+                  ? _phoneController.text
+                  : 'Not provided',
+              icon: Icons.phone,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDetailItem({
+    required String label,
+    required String value,
+    required IconData icon,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              icon,
+              color: Theme.of(context).primaryColor,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 13,
+                ),
+              ),
+              Text(
+                value,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatsSection() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          _buildStatCard('Complaints', '0', Icons.report_problem_outlined),
+          const SizedBox(width: 16),
+          _buildStatCard('Resolved', '0', Icons.check_circle_outline),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatCard(String title, String value, IconData icon) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                icon,
+                color: Theme.of(context).primaryColor,
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 13,
+                  ),
+                ),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSocialSection() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Community Engagement',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildSocialButton(Icons.chat_bubble_outline, 'Messages'),
+              _buildSocialButton(Icons.groups_outlined, 'Community'),
+              _buildSocialButton(Icons.share_outlined, 'Share'),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSocialButton(IconData icon, String label) {
+    return InkWell(
+      onTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('$label feature coming soon')),
+        );
+      },
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              icon,
+              color: Theme.of(context).primaryColor,
+              size: 24,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.grey[800],
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildProfileImage() {
     return Stack(
       children: [
-        SizedBox(
+        Container(
           width: 120,
           height: 120,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: Colors.white,
+              width: 4,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                spreadRadius: 5,
+              ),
+            ],
+          ),
           child: _isUploading
-              ? const Center(
-                  child: CircularProgressIndicator(),
+              ? Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
                 )
               : CircleAvatar(
                   backgroundColor: Colors.grey[300],
@@ -331,6 +653,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                   color: Colors.white,
                   width: 2,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 5,
+                    spreadRadius: 1,
+                  ),
+                ],
               ),
               child: const Icon(
                 Icons.camera_alt,
@@ -344,57 +673,41 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
   }
 
-  Widget _buildInputField({
-    required String label,
-    required TextEditingController controller,
-    required IconData icon,
-    bool enabled = true,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: TextFormField(
-        controller: controller,
-        enabled: enabled,
-        decoration: InputDecoration(
-          labelText: label,
-          prefixIcon: Icon(icon, color: Theme.of(context).primaryColor),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 12,
-          ),
-        ),
-        style: TextStyle(
-          color: enabled ? Colors.black : Colors.grey[700],
-        ),
-      ),
-    );
-  }
-
   void _showLogoutConfirmation() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Logout'),
-          content: const Text('Are you sure you want to logout?'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Row(
+            children: [
+              Icon(
+                Icons.logout_rounded,
+                color: Theme.of(context).primaryColor,
+              ),
+              const SizedBox(width: 8),
+              const Text('Sign Out'),
+            ],
+          ),
+          content: const Text(
+              'Are you sure you want to sign out from your account?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: const Text('Cancel'),
             ),
-            TextButton(
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red[400],
+                foregroundColor: Colors.white,
+              ),
               onPressed: () async {
                 Navigator.of(context).pop();
                 await _authController.logout();
               },
-              child: const Text(
-                'Logout',
-                style: TextStyle(color: Colors.red),
-              ),
+              child: const Text('Sign Out'),
             ),
           ],
         );

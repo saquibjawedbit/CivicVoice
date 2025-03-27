@@ -2,6 +2,8 @@ import 'package:civic_voice/screens/authentication/landing_screen.dart';
 import 'package:civic_voice/screens/home_screen.dart';
 import 'package:civic_voice/services/token_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:civic_voice/components/controller/authentication_controller.dart';
 
 class App extends StatefulWidget {
   const App({
@@ -19,7 +21,16 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
+    // Initialize controllers
+    _initializeControllers();
     _checkAuthStatus();
+  }
+
+  void _initializeControllers() {
+    // Make sure the AuthenticationController is available throughout the app
+    if (!Get.isRegistered<AuthenticationController>()) {
+      Get.put(AuthenticationController());
+    }
   }
 
   Future<void> _checkAuthStatus() async {
