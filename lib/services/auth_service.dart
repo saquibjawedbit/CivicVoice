@@ -9,7 +9,7 @@ class AuthService {
   Future<Map<String, dynamic>> signup(
       String name, String email, String password) async {
     try {
-      final response = await ApiClient.post('/signup', {
+      final response = await ApiClient.post('/auth/signup', {
         'name': name,
         'email': email,
         'password': password,
@@ -30,7 +30,7 @@ class AuthService {
   // Login API endpoint
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {
-      final response = await ApiClient.post('/login', {
+      final response = await ApiClient.post('/auth/login', {
         'email': email,
         'password': password,
       });
@@ -50,7 +50,7 @@ class AuthService {
   // Forgot password API endpoint
   Future<Map<String, dynamic>> forgotPassword(String email) async {
     try {
-      final response = await ApiClient.post('/forgot-password', {
+      final response = await ApiClient.post('/auth/forgot-password', {
         'email': email,
       });
 
@@ -64,7 +64,7 @@ class AuthService {
   // Get current user info
   Future<Map<String, dynamic>> getMe() async {
     try {
-      final response = await ApiClient.get('/me');
+      final response = await ApiClient.get('/auth/me');
       // Refresh token expiry on successful me request
       await TokenStorage.refreshTokenExpiry();
       return response;
@@ -82,7 +82,7 @@ class AuthService {
         await ApiClient.setCustomHeaderToken(token);
       }
 
-      final response = await ApiClient.post('/verify-otp', {
+      final response = await ApiClient.post('/auth/verify-otp', {
         'otp': otp,
       });
 

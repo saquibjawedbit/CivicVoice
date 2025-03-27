@@ -9,7 +9,7 @@ class ApiClient {
   static String get baseUrl {
     // If running on Android emulator
     if (Platform.isAndroid && !kReleaseMode) {
-      return 'http://10.0.2.2:5000'; // Android emulator localhost
+      return 'http://10.0.2.2:5000/api'; // Android emulator localhost
     }
     // If running on iOS simulator
     else if (Platform.isIOS && !kReleaseMode) {
