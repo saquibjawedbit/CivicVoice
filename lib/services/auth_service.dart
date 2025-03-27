@@ -115,7 +115,7 @@ class AuthService {
         await ApiClient.setCustomHeaderToken(token);
       }
 
-      final response = await ApiClient.post('/resend-otp', {});
+      final response = await ApiClient.post('/auth/resend-otp', {});
 
       // Clear custom token header after request
       if (token != null) {
@@ -136,7 +136,7 @@ class AuthService {
   // Logout
   Future<void> logout() async {
     try {
-      await ApiClient.get('/logout');
+      await ApiClient.get('/auth/logout');
       await TokenStorage.clearToken();
     } catch (e) {
       debugPrint('Logout error: $e');
