@@ -1,8 +1,10 @@
 import 'dart:convert';
-import 'dart:io' show Platform;
+import 'dart:io' show File, Platform;
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:civic_voice/services/token_storage.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:path/path.dart';
 
 class ApiClient {
   // Dynamically determine the base URL based on platform and environment
@@ -129,6 +131,86 @@ class ApiClient {
       }
     } catch (e) {
       debugPrint('API GET Error: $e');
+      if (e is FormatException) {
+        throw 'Failed to connect to the server. Please check your internet connection.';
+      }
+      rethrow;
+    }
+  }
+
+  // POST multipart form data with file upload
+  static Future<Map<String, dynamic>> postFormData(
+      String endpoint, Map<String, dynamic> fields, List<File> files,
+      {List<String> fileFieldNames = const ['image']}) async {
+    try {
+      final headers = await _getHeaders();
+      // Remove the Content-Type header as it will be set by the multipart request
+      headers.remove('Content-Type');
+
+      final url = Uri.parse('$baseUrl$endpoint');
+      debugPrint('Making POST form data request to: $url');
+
+      final request = http.MultipartRequest('POST', url);
+
+      // Add headers
+      request.headers.addAll(headers);
+
+      // Add text fields
+      fields.forEach((key, value) {
+        request.fields[key] = value.toString();
+      });
+
+      // Add files
+      for (int i = 0; i < files.length; i++) {
+        final file = files[i];
+        final fileName = basename(file.path);
+        // Use the provided field name or default to 'image'
+        final fieldName =
+            i < fileFieldNames.length ? fileFieldNames[i] : 'image';
+
+        // Determine content type based on file extension
+        final fileExtension = fileName.split('.').last.toLowerCase();
+        String contentType = 'application/octet-stream';
+        String subtype = 'octet-stream';
+
+        if (['jpg', 'jpeg'].contains(fileExtension)) {
+          contentType = 'image/jpeg';
+          subtype = 'jpeg';
+        } else if (fileExtension == 'png') {
+          contentType = 'image/png';
+          subtype = 'png';
+        } else if (fileExtension == 'gif') {
+          contentType = 'image/gif';
+          subtype = 'gif';
+        }
+
+        final fileStream = http.ByteStream(file.openRead());
+        final fileLength = await file.length();
+
+        final multipartFile = http.MultipartFile(
+          fieldName,
+          fileStream,
+          fileLength,
+          filename: fileName,
+          contentType: MediaType.parse(contentType).change(subtype: subtype),
+        );
+
+        request.files.add(multipartFile);
+      }
+
+      // Send the request
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      debugPrint('Response status: ${response.statusCode}');
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        return json.decode(response.body);
+      } else {
+        throw _handleError(response);
+      }
+    } catch (e) {
+      debugPrint('API POST FormData Error: $e');
       if (e is FormatException) {
         throw 'Failed to connect to the server. Please check your internet connection.';
       }
