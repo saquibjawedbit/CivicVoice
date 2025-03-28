@@ -1,10 +1,17 @@
 import 'package:civic_voice/components/constants/colors.dart';
+import 'package:civic_voice/components/controller/authentication_controller.dart';
+import 'package:civic_voice/components/controller/complaint_controller.dart';
 import 'package:civic_voice/screens/app.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize controllers at app startup
+  Get.put(AuthenticationController());
+  Get.put(ComplaintController());
+
   runApp(const MyApp());
 }
 
