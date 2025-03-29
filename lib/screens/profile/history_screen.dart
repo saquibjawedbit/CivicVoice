@@ -3,6 +3,7 @@ import 'package:civic_voice/screens/profile/history_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart'; // Add this import for date formatting
+import 'package:civic_voice/components/controller/complaint_controller.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -20,6 +21,10 @@ class _HistoryScreenState extends State<HistoryScreen>
   late AnimationController _slideController;
   bool _isSortedAscending = true;
   String _filterStatus = "All";
+
+  // Add ComplaintController instance
+  final ComplaintController _complaintController =
+      Get.put(ComplaintController());
 
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
@@ -53,54 +58,15 @@ class _HistoryScreenState extends State<HistoryScreen>
   }
 
   void _loadData() async {
-    //TODO: Load data from database
-    // For demonstration purposes, let's create some mock data
-    final List<ComplainModel> mockData = [
-      ComplainModel(
-        title: "Broken street light in North Avenue",
-        description:
-            "Street light has been out for 3 days causing safety issues",
-        category: "Infrastructure", // Added required parameter
-        address: "123 North Avenue",
-        landMark: "Near Central Park",
-        status: 0, // Working on it
-        imageUrl: "",
-        complaintDate: DateTime.now().subtract(const Duration(days: 3)),
-        userId: "user123", // Added required parameter
-        latitude: 37.7749, // Added required parameter
-        longitude: -122.4194, // Added required parameter
-      ),
-      ComplainModel(
-        title: "Garbage not collected on Main Street",
-        description:
-            "Garbage has not been collected for a week causing hygiene concerns",
-        category: "Sanitation", // Added required parameter
-        address: "78 Main Street",
-        landMark: "Opposite City Mall",
-        status: 2, // Resolved
-        imageUrl: "",
-        complaintDate: DateTime.now().subtract(const Duration(days: 10)),
-        userId: "user123", // Added required parameter
-        latitude: 37.7750, // Added required parameter
-        longitude: -122.4180, // Added required parameter
-      ),
-      ComplainModel(
-        title: "Pothole on Highway 7",
-        description: "Large pothole causing traffic and damage to vehicles",
-        category: "Roads", // Added required parameter
-        address: "Highway 7, Mile 23",
-        landMark: "Near gas station",
-        status: 1, // Not Resolved
-        imageUrl: "",
-        complaintDate: DateTime.now().subtract(const Duration(days: 15)),
-        userId: "user123", // Added required parameter
-        latitude: 37.7755, // Added required parameter
-        longitude: -122.4160, // Added required parameter
-      ),
-    ];
+    // Use the complaint controller to fetch real data
+    await _complaintController.fetchUserComplaints();
 
     setState(() {
-      list = mockData;
+      // Convert Map<String, dynamic> to ComplainModel objects
+      list = _complaintController.complaints.map((complaintMap) {
+        return ComplainModel.fromMap(complaintMap, complaintMap['id']);
+      }).toList();
+
       _filteredItems = list;
     });
   }
@@ -171,6 +137,14 @@ class _HistoryScreenState extends State<HistoryScreen>
         ),
         actions: [
           IconButton(
+            onPressed: () => _loadData(), // Add refresh functionality
+            icon: const Icon(
+              Icons.refresh,
+              color: Colors.white,
+            ),
+            tooltip: 'Refresh complaints',
+          ),
+          IconButton(
             onPressed: () => _sortList(),
             icon: Icon(
               _isSortedAscending
@@ -184,12 +158,19 @@ class _HistoryScreenState extends State<HistoryScreen>
           ),
         ],
       ),
-      body: Column(
-        children: [
-          _buildSearchContainer(),
-          _buildFilterChips(),
-          _buildHistoryList(),
-        ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await _complaintController.fetchUserComplaints();
+          _loadData();
+        },
+        color: Theme.of(context).colorScheme.primary,
+        child: Column(
+          children: [
+            _buildSearchContainer(),
+            _buildFilterChips(),
+            _buildHistoryList(),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -338,6 +319,30 @@ class _HistoryScreenState extends State<HistoryScreen>
   }
 
   Widget _buildHistoryList() {
+    // Show loading indicator when fetching complaints
+    if (_complaintController.isLoading.value) {
+      return Expanded(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                "Loading complaints...",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey[700],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     if (list.isEmpty) {
       return Expanded(
         child: FadeTransition(

@@ -49,9 +49,8 @@ class ComplaintService {
       final response = await ApiClient.get('/complaints/user');
 
       // Check if the response has the correct format
-      if (response.containsKey('complaints') &&
-          response['complaints'] is List) {
-        return List<Map<String, dynamic>>.from(response['complaints']);
+      if (response.containsKey('data') && response['data'] is List) {
+        return List<Map<String, dynamic>>.from(response['data']);
       }
 
       return [];

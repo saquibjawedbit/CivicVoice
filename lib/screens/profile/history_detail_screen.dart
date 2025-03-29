@@ -57,6 +57,7 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen>
         title: const Text(
           "Complaint Details",
           style: TextStyle(
+            fontSize: 24,
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
@@ -414,38 +415,77 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen>
               _locationRow(
                   Icons.place, "Landmark", widget.complainModel.landMark!),
               const SizedBox(height: 16),
-              // Map placeholder
+              // Map placeholder with error handling
               Container(
                 height: 120,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   color: Colors.grey[200],
-                  image: const DecorationImage(
-                    image: NetworkImage(
-                        "https://maps.googleapis.com/maps/api/staticmap?center=37.7749,-122.4194&zoom=13&size=600x300&maptype=roadmap"),
-                    fit: BoxFit.cover,
-                  ),
                 ),
-                alignment: Alignment.center,
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Colors.blue.shade50,
+                              Colors.blue.shade100,
+                            ],
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.map,
+                          size: 40,
+                          color: Colors.blue.shade300,
+                        ),
+                      ),
                     ),
-                  ),
-                  onPressed: () {},
-                  icon: const Icon(Icons.map, color: Colors.blue),
-                  label: const Text("Open in Maps",
-                      style: TextStyle(color: Colors.blue)),
+                    Positioned.fill(
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: () {
+                            _openInMaps(widget.complainModel.latitude,
+                                widget.complainModel.longitude);
+                          },
+                          icon: const Icon(Icons.map, color: Colors.blue),
+                          label: const Text("Open in Maps",
+                              style: TextStyle(color: Colors.blue)),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  void _openInMaps(double latitude, double longitude) {
+    // This would be implemented to open the location in a maps app
+    Get.snackbar(
+      "Open Maps",
+      "Maps integration will be available soon",
+      snackPosition: SnackPosition.BOTTOM,
+      margin: const EdgeInsets.all(8),
+      backgroundColor: Colors.black87,
+      colorText: Colors.white,
     );
   }
 
