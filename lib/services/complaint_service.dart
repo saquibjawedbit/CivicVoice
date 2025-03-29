@@ -10,6 +10,7 @@ class ComplaintService {
     required String location,
     required String category,
     required File imageFile,
+    required String landmark,
     String? latitude,
     String? longitude,
   }) async {
@@ -18,8 +19,9 @@ class ComplaintService {
       final fields = {
         'title': title,
         'description': description,
-        'location': location,
+        'address': location,
         'category': category,
+        'landmark': landmark,
         if (latitude != null) 'latitude': latitude,
         if (longitude != null) 'longitude': longitude,
       };
@@ -28,7 +30,7 @@ class ComplaintService {
 
       // Make the API request with the image file
       final response = await ApiClient.postFormData(
-        '/complaints',
+        '/complaints/',
         fields,
         [imageFile],
         fileFieldNames: ['image'],

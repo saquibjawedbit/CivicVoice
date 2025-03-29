@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:civic_voice/components/constants/category_complaint.dart';
+import 'package:civic_voice/components/controller/complaint_controller.dart';
 import 'package:civic_voice/components/controller/location_controller.dart';
 import 'package:civic_voice/screens/complain/confirmation_screen.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +28,7 @@ class _SubmitDetailScreenState extends State<SubmitDetailScreen> {
   bool _isSubmitting = false;
 
   final LocationController _locationController = Get.find();
+  final ComplaintController _complaintController = Get.find();
 
   @override
   void initState() {
@@ -365,9 +369,19 @@ class _SubmitDetailScreenState extends State<SubmitDetailScreen> {
       });
 
       try {
-        await Future.delayed(const Duration(milliseconds: 800));
         // Store location data but don't use yet - for future implementations
         // These values will be used when submitting to a backend
+
+        await _complaintController.postComplaint(
+          title: titleController.text,
+          description: descriptionController.text,
+          location: addressController.text,
+          landmark: landmarkController.text,
+          category: category!,
+          imageFile: File(widget.image.path),
+          latitude: _locationController.latitude.toString(),
+          longitude: _locationController.longitude.toString(),
+        );
 
         Get.offAll(() => const ConfirmationScreen());
       } catch (e) {

@@ -25,6 +25,7 @@ class ComplaintController extends GetxController {
     required String location,
     required String category,
     required File imageFile,
+    required String landmark,
     String? latitude,
     String? longitude,
   }) async {
@@ -32,10 +33,11 @@ class ComplaintController extends GetxController {
       isLoading.value = true;
       errorMessage.value = '';
 
-      final response = await _complaintService.postComplaint(
+      await _complaintService.postComplaint(
         title: title,
         description: description,
         location: location,
+        landmark: landmark,
         category: category,
         imageFile: imageFile,
         latitude: latitude,
