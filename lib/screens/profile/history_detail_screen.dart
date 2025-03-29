@@ -117,7 +117,7 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen>
               child: Image.network(
                 widget.complainModel.imageUrl == ""
                     ? "https://images.unsplash.com/photo-1587691592099-24045742c181?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    : widget.complainModel.imageUrl,
+                    : widget.complainModel.imageUrl!,
                 fit: BoxFit.cover,
               ),
             ),
@@ -145,7 +145,7 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen>
     String statusText;
     IconData statusIcon;
 
-    switch (widget.complainModel.status) {
+    switch (widget.complainModel.statusCode) {
       case 0:
         statusColor = Colors.orange;
         statusText = "Working on it!";
@@ -495,26 +495,31 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen>
       children: [
         Icon(icon, color: Colors.grey[600], size: 18),
         const SizedBox(width: 8),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-                fontWeight: FontWeight.w500,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black87,
+              const SizedBox(height: 2),
+              Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black87,
+                ),
+                softWrap: true,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );
@@ -583,22 +588,22 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen>
             ),
             _timelineItem(
               "In Progress",
-              widget.complainModel.status >= 0
+              widget.complainModel.statusCode >= 0
                   ? "${widget.complainModel.complaintDate.add(const Duration(days: 2)).toString().substring(0, 10)}"
                   : "Pending",
               Icons.engineering,
               Colors.orange,
-              isDone: widget.complainModel.status >= 0,
+              isDone: widget.complainModel.statusCode >= 0,
             ),
             _timelineItem(
               "Resolved",
-              widget.complainModel.status == 2
+              widget.complainModel.statusCode == 2
                   ? "${widget.complainModel.complaintDate.add(const Duration(days: 5)).toString().substring(0, 10)}"
                   : "Pending",
               Icons.check_circle,
               Colors.green,
               isLast: true,
-              isDone: widget.complainModel.status == 2,
+              isDone: widget.complainModel.statusCode == 2,
             ),
           ],
         ),

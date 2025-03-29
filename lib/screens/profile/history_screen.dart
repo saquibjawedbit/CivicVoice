@@ -83,9 +83,9 @@ class _HistoryScreenState extends State<HistoryScreen>
 
         // Then filter by status if not "All"
         final matchesStatus = _filterStatus == "All" ||
-            (_filterStatus == "Working" && item.status == 0) ||
-            (_filterStatus == "Resolved" && item.status == 2) ||
-            (_filterStatus == "Not Resolved" && item.status == 1);
+            (_filterStatus == "Working" && item.statusCode == 0) ||
+            (_filterStatus == "Resolved" && item.statusCode == 2) ||
+            (_filterStatus == "Not Resolved" && item.statusCode == 1);
 
         return matchesSearch && matchesStatus;
       }).toList();
@@ -448,7 +448,7 @@ class _HistoryScreenState extends State<HistoryScreen>
     String statusText;
     IconData statusIcon;
 
-    switch (complaint.status) {
+    switch (complaint.statusCode) {
       case 0:
         statusColor = Colors.orange;
         statusText = "Working on it!";
@@ -550,9 +550,13 @@ class _HistoryScreenState extends State<HistoryScreen>
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: 8),
+                        // Improved address layout with better overflow handling
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Icon(
                               Icons.location_on,
@@ -567,7 +571,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                                   fontSize: 14,
                                   color: Colors.grey[600],
                                 ),
-                                maxLines: 1,
+                                maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
