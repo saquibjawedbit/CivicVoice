@@ -19,7 +19,7 @@ This application allows users to capture photos of road issues (potholes, damage
 - Database: MongoDB for persisting reports and admin state.
 - Admin Dashboard: Web app that consumes the backend API and enforces RBAC.
 
-![alt text](image.png)
+![alt text](image-1.png)
 
 Flow:
 1. User opens mobile app and taps to create a report.
